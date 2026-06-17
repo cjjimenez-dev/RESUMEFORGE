@@ -1,10 +1,10 @@
-# ResumeForge 📄✨
+# ResumeForge 
 
 A modern, AI-powered resume builder designed to help you create professional, ATS-friendly resumes. Built with a sleek React frontend and a powerful Python backend, ResumeForge allows you to import existing resumes (PDF/DOCX), use dynamic live-preview templates, and export your polished portfolio to Word or PDF formats.
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 ### Frontend
 * **Framework**: React 18 + Vite
@@ -22,7 +22,7 @@ A modern, AI-powered resume builder designed to help you create professional, AT
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 Follow these instructions to set up the project locally on your machine.
 
@@ -83,7 +83,7 @@ Make sure you have the following installed:
 
 ---
 
-## 💡 Usage
+## Usage
 1. Open your browser and go to the frontend URL (e.g., `http://localhost:5174`).
 2. Create an account or click **Continue as Guest**.
 3. Drag and drop an existing PDF/DOCX resume, or click **Create Resume** to start from scratch.
