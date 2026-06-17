@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Save, Download, RefreshCw, User, Briefcase, GraduationCap, Code, Star, ChevronDown, ChevronUp, Trash2, Plus } from 'lucide-react';
+import { Save, Download, RefreshCw, User, Briefcase, GraduationCap, Code, Star, ChevronDown, ChevronUp, Trash2, Plus, Minus } from 'lucide-react';
 import { ClassicTemplate, ModernTemplate, CreativeTemplate } from './ResumeTemplates';
 import ImageCropperModal from './ImageCropperModal';
 
@@ -110,15 +110,23 @@ export function Editor({
                           </div>
                           <div className="flex flex-col gap-1.5 flex-1">
                             <label className="text-[10px] font-medium text-textMuted uppercase tracking-wide">Size</label>
-                            <select 
-                              className="w-full bg-slate-800 border border-borderDark rounded px-2 py-1 text-xs text-textMain focus:outline-none focus:border-primary"
-                              value={currentResume.content?.personal_info?.image_size || 'medium'}
-                              onChange={(e) => updatePersonalInfo('image_size', e.target.value)}
-                            >
-                              <option value="small">Small</option>
-                              <option value="medium">Medium</option>
-                              <option value="large">Large</option>
-                            </select>
+                            <div className="flex items-center justify-between bg-slate-800 border border-borderDark rounded overflow-hidden h-[26px]">
+                              <button 
+                                onClick={() => updatePersonalInfo('image_size', Math.max(40, (typeof currentResume.content?.personal_info?.image_size === 'number' ? currentResume.content?.personal_info?.image_size : 120) - 10))} 
+                                className="px-2 h-full text-textMuted hover:text-white hover:bg-slate-700 transition-colors flex items-center justify-center"
+                              >
+                                <Minus size={12} />
+                              </button>
+                              <div className="flex-1 text-center text-xs text-textMain font-medium">
+                                {typeof currentResume.content?.personal_info?.image_size === 'number' ? currentResume.content?.personal_info?.image_size : 120}px
+                              </div>
+                              <button 
+                                onClick={() => updatePersonalInfo('image_size', Math.min(400, (typeof currentResume.content?.personal_info?.image_size === 'number' ? currentResume.content?.personal_info?.image_size : 120) + 10))} 
+                                className="px-2 h-full text-textMuted hover:text-white hover:bg-slate-700 transition-colors flex items-center justify-center"
+                              >
+                                <Plus size={12} />
+                              </button>
+                            </div>
                           </div>
                           <div className="flex flex-col gap-1.5 flex-1">
                             <label className="text-[10px] font-medium text-textMuted uppercase tracking-wide">Shape</label>

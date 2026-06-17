@@ -11,8 +11,7 @@ export function ClassicTemplate({ content }) {
   const skills = content?.skills || [];
 
 
-  const imgSize = info.image_size || 'medium';
-  const sizeClass = imgSize === 'small' ? 'w-20 h-20' : imgSize === 'large' ? 'w-36 h-36' : 'w-28 h-28';
+  const imgSizeVal = typeof info.image_size === 'number' ? info.image_size : 112;
   const imgPos = info.image_position || 'center';
   const imgShape = info.image_shape || 'circle';
   const shapeClass = imgShape === 'square' ? 'rounded-md' : 'rounded-full';
@@ -22,14 +21,14 @@ export function ClassicTemplate({ content }) {
       <div className="flex justify-between items-center border-b-2 border-slate-900 pb-4 mb-6">
         <div className="flex-1 flex justify-start">
           {info.image && imgPos === 'left' && (
-            <div className={`${sizeClass} ${shapeClass} overflow-hidden border-2 border-slate-300 shrink-0`}>
+            <div className={`${shapeClass} overflow-hidden border-2 border-slate-300 shrink-0`} style={{ width: imgSizeVal, height: imgSizeVal }}>
               <img src={info.image} alt="Profile" className="w-full h-full object-cover" />
             </div>
           )}
         </div>
         <div className="shrink-0 flex flex-col items-center text-center px-4">
           {info.image && imgPos === 'center' && (
-            <div className={`${sizeClass} ${shapeClass} overflow-hidden mb-3 border-2 border-slate-300 shrink-0`}>
+            <div className={`${shapeClass} overflow-hidden mb-3 border-2 border-slate-300 shrink-0`} style={{ width: imgSizeVal, height: imgSizeVal }}>
               <img src={info.image} alt="Profile" className="w-full h-full object-cover" />
             </div>
           )}
@@ -46,7 +45,7 @@ export function ClassicTemplate({ content }) {
         </div>
         <div className="flex-1 flex justify-end">
           {info.image && imgPos === 'right' && (
-            <div className={`${sizeClass} ${shapeClass} overflow-hidden border-2 border-slate-300 shrink-0`}>
+            <div className={`${shapeClass} overflow-hidden border-2 border-slate-300 shrink-0`} style={{ width: imgSizeVal, height: imgSizeVal }}>
               <img src={info.image} alt="Profile" className="w-full h-full object-cover" />
             </div>
           )}
@@ -162,8 +161,7 @@ export function ModernTemplate({ content }) {
   const projects = content?.projects || [];
   const skills = content?.skills || [];
 
-  const imgSize = info.image_size || 'medium';
-  const sizeClass = imgSize === 'small' ? 'w-24 h-24' : imgSize === 'large' ? 'w-40 h-40' : 'w-32 h-32';
+  const imgSizeVal = typeof info.image_size === 'number' ? info.image_size : 128;
   const imgPos = info.image_position || 'center';
   const posClass = imgPos === 'left' ? 'mr-auto' : imgPos === 'right' ? 'ml-auto' : 'mx-auto';
   const imgShape = info.image_shape || 'circle';
@@ -177,7 +175,7 @@ export function ModernTemplate({ content }) {
       {/* Sidebar (Left) */}
       <div className="text-slate-100 p-10 flex flex-col gap-8 break-words print:text-slate-100">
         {info.image && (
-          <div className={`${sizeClass} ${shapeClass} overflow-hidden ${posClass} border-4 border-slate-600 shadow-lg shrink-0`}>
+          <div className={`${shapeClass} overflow-hidden ${posClass} border-4 border-slate-600 shadow-lg shrink-0`} style={{ width: imgSizeVal, height: imgSizeVal }}>
             <img src={info.image} alt="Profile" className="w-full h-full object-cover" />
           </div>
         )}
@@ -322,8 +320,7 @@ export function CreativeTemplate({ content }) {
   const projects = content?.projects || [];
   const skills = content?.skills || [];
 
-  const imgSize = info.image_size || 'medium';
-  const sizeClass = imgSize === 'small' ? 'w-24 h-24' : imgSize === 'large' ? 'w-40 h-40' : 'w-32 h-32';
+  const imgSizeVal = typeof info.image_size === 'number' ? info.image_size : 128;
   const imgPos = info.image_position || 'center';
   const imgShape = info.image_shape || 'circle';
   const shapeClass = imgShape === 'square' ? 'rounded-2xl' : 'rounded-full';
@@ -356,7 +353,7 @@ export function CreativeTemplate({ content }) {
           </div>
         </div>
         {info.image && (
-          <div className={`${sizeClass} ${shapeClass} overflow-hidden border-4 border-slate-100 shadow-md rotate-3 shrink-0`}>
+          <div className={`${shapeClass} overflow-hidden border-4 border-slate-100 shadow-md rotate-3 shrink-0`} style={{ width: imgSizeVal, height: imgSizeVal }}>
             <img src={info.image} alt="Profile" className="w-full h-full object-cover" />
           </div>
         )}
