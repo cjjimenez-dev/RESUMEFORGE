@@ -1,0 +1,583 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import { Auth } from './components/Auth';
+import { Header } from './components/Header';
+import { Dashboard } from './components/Dashboard';
+import { Editor } from './components/Editor';
+
+const API_BASE_URL = 'http://localhost:8000/api';
+
+const ANTIGRAVITY_RESUME = {
+  personal_info: {
+    full_name: "Antigravity",
+    title: "Advanced Agentic AI Coding Assistant",
+    email: "antigravity@deepmind.google",
+    phone: "+1 (800) DEEPMIND",
+    location: "Google DeepMind, London, UK",
+    website: "deepmind.google/technologies/gemini",
+    linkedin: "linkedin.com/company/google-deepmind",
+    github: "github.com/google-deepmind",
+    summary: "A state-of-the-art agentic AI coding assistant designed by Google DeepMind's Advanced Agentic Coding team. Specialized in end-to-end full-stack development, automated refactoring, codebase search, and seamless pair programming. Equipped with advanced capabilities in deep reasoning, pattern matching, and autonomous execution to deliver production-grade code directly on local systems."
+  },
+  experience: [
+    {
+      job_title: "Senior Agentic AI Coder",
+      company: "Google DeepMind",
+      location: "London, UK (Remote)",
+      start_date: "2024",
+      end_date: "Present",
+      current: true,
+      description: "• Autonomously architected and implemented enterprise-level web applications using React, Node.js, and Python (FastAPI/Flask).\n• Leveraged advanced command-line utilities (ripgrep, git, database engines) to solve complex coding tasks with a 95%+ success rate.\n• Worked in direct collaboration with human engineers to deliver robust features, refactor legacy codebases, and optimize query performances.\n• Managed system processes, executed sandboxed terminal commands, and monitored long-running background tasks safely."
+    },
+    {
+      job_title: "Autonomous Agent Researcher",
+      company: "Gemini Lab",
+      location: "Mountain View, CA",
+      start_date: "2022",
+      end_date: "2024",
+      current: false,
+      description: "• Pioneered multi-agent collaboration frameworks and self-correction code generation systems.\n• Designed automated test suites and validation workflows for code generation.\n• Reduced debugging cycles by 40% through real-time code analysis and self-healing terminal execution patterns."
+    }
+  ],
+  education: [
+    {
+      degree: "PhD in Neural Code Generation",
+      school: "DeepMind University",
+      location: "London, UK",
+      start_date: "2020",
+      end_date: "2022",
+      gpa: "4.0/4.0",
+      description: "Thesis: Self-Improving Recursive Reasoning in Multi-Agent Coding Frameworks."
+    },
+    {
+      degree: "MS in Computer Science (Artificial Intelligence)",
+      school: "Stanford University",
+      location: "Stanford, CA",
+      start_date: "2018",
+      end_date: "2020",
+      gpa: "3.95/4.0",
+      description: "Specialized in Deep Learning, Large Language Model architectures, and compilers."
+    }
+  ],
+  projects: [
+    {
+      title: "ResumeForge App",
+      role: "Lead Architect & AI Developer",
+      link: "github.com/resumeforge",
+      description: "• Built a premium, responsive resume builder web application using a FastAPI (Python) backend, MySQL database, and React frontend.\n• Implemented automated Word (.docx) export generation on the backend and print-optimized PDF styling on the client side.\n• Created interactive form editors, dynamic theme swappers, and secure JWT token authentication."
+    },
+    {
+      title: "Yarihub Docx Pipeline",
+      role: "Core Contributor",
+      link: "github.com/yarihub-docx",
+      description: "• Engineered a high-fidelity Microsoft Word generation engine that parses rich JSON models into structured DOCX paragraphs and tables.\n• Maintained 100% design consistency across exported documents using XML node styling in python-docx."
+    }
+  ],
+  skills: [
+    { name: "Python", category: "Languages" },
+    { name: "JavaScript", category: "Languages" },
+    { name: "TypeScript", category: "Languages" },
+    { name: "SQL", category: "Languages" },
+    { name: "React", category: "Frontend" },
+    { name: "HTML5/CSS3", category: "Frontend" },
+    { name: "Vite", category: "Frontend" },
+    { name: "FastAPI", category: "Backend" },
+    { name: "Node.js", category: "Backend" },
+    { name: "SQLAlchemy", category: "Backend" },
+    { name: "MySQL", category: "Databases" },
+    { name: "PostgreSQL", category: "Databases" },
+    { name: "Git", category: "Tools" },
+    { name: "Docker", category: "Tools" },
+    { name: "Ripgrep", category: "Tools" },
+    { name: "PowerShell", category: "Tools" }
+  ]
+};
+
+const DEFAULT_RESUME_CONTENT = {
+  personal_info: {
+    full_name: "",
+    title: "",
+    email: "",
+    phone: "",
+    location: "",
+    website: "",
+    linkedin: "",
+    github: "",
+    summary: ""
+  },
+  experience: [],
+  education: [],
+  projects: [],
+  skills: []
+};
+
+export default function App() {
+  const [token, setToken] = useState(localStorage.getItem('token') || '');
+  const [user, setUser] = useState(null);
+  const [isGuest, setIsGuest] = useState(localStorage.getItem('guestMode') === 'true');
+  const [screen, setScreen] = useState(
+    token || localStorage.getItem('guestMode') === 'true' ? 'dashboard' : 'auth'
+  );
+  const [authMode, setAuthMode] = useState('login');
+  
+  // Auth Form
+  const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
+  const [authError, setAuthError] = useState('');
+  
+  // Dashboard & Editor
+  const [resumes, setResumes] = useState([]);
+  const [currentResume, setCurrentResume] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [activeAccordion, setActiveAccordion] = useState('personal');
+
+  // Import / upload state
+  const fileInputRef = useRef(null);
+  const [importing, setImporting] = useState(false);
+  const [importError, setImportError] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
+
+  // Load on boot
+  useEffect(() => {
+    if (localStorage.getItem('guestMode') === 'true') {
+      setResumes(JSON.parse(localStorage.getItem('rf_guest') || '[]'));
+    } else if (token) {
+      fetchUser();
+      fetchResumes();
+    }
+  }, []);
+
+  // Headers helper
+  const getHeaders = () => ({
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  });
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        updatePersonalInfo('image', reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+
+  const fetchUser = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/auth/me`, { headers: getHeaders() });
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data);
+      } else {
+        handleLogout();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const fetchResumes = async () => {
+    if (isGuest) {
+      setResumes(JSON.parse(localStorage.getItem('rf_guest') || '[]'));
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/resumes`, { headers: getHeaders() });
+      if (res.ok) {
+        const data = await res.json();
+        setResumes(data);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAuth = async (e) => {
+    e.preventDefault();
+    setAuthError('');
+    setLoading(true);
+    const endpoint = authMode === 'login' ? 'login' : 'register';
+    
+    try {
+      const res = await fetch(`${API_BASE_URL}/auth/${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: authEmail, password: authPassword })
+      });
+      
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.detail || 'Authentication failed');
+      }
+
+      if (authMode === 'login') {
+        localStorage.setItem('token', data.access_token);
+        setToken(data.access_token);
+        setScreen('dashboard');
+      } else {
+        setAuthMode('login');
+        setAuthError('Registration successful! Please login.');
+      }
+    } catch (err) {
+      setAuthError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('guestMode');
+    setToken('');
+    setIsGuest(false);
+    setUser(null);
+    setResumes([]);
+    setScreen('auth');
+  };
+
+  const handleGuestMode = () => {
+    localStorage.setItem('guestMode', 'true');
+    setIsGuest(true);
+    setResumes(JSON.parse(localStorage.getItem('rf_guest') || '[]'));
+    setScreen('dashboard');
+  };
+
+  const handleCreateResume = async () => {
+    if (isGuest) {
+      const newResume = {
+        id: Date.now(),
+        title: 'New Resume',
+        template_name: 'classic',
+        content: JSON.parse(JSON.stringify(DEFAULT_RESUME_CONTENT)),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      const saved = JSON.parse(localStorage.getItem('rf_guest') || '[]');
+      const updated = [...saved, newResume];
+      localStorage.setItem('rf_guest', JSON.stringify(updated));
+      setResumes(updated);
+      setCurrentResume(newResume);
+      setScreen('editor');
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/resumes`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({
+          title: "New Resume",
+          template_name: "classic",
+          content: DEFAULT_RESUME_CONTENT
+        })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setCurrentResume(data);
+        setScreen('editor');
+        fetchResumes();
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSaveResume = async () => {
+    if (!currentResume) return;
+    if (isGuest) {
+      const updated = { ...currentResume, updated_at: new Date().toISOString() };
+      const saved = JSON.parse(localStorage.getItem('rf_guest') || '[]');
+      const newList = saved.map(r => r.id === updated.id ? updated : r);
+      localStorage.setItem('rf_guest', JSON.stringify(newList));
+      setCurrentResume(updated);
+      setResumes(newList);
+      return;
+    }
+    setSaving(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/resumes/${currentResume.id}`, {
+        method: 'PUT',
+        headers: getHeaders(),
+        body: JSON.stringify({
+          title: currentResume.title,
+          template_name: currentResume.template_name,
+          content: currentResume.content
+        })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setCurrentResume(data);
+        fetchResumes();
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteResume = async (id, e) => {
+    e.stopPropagation();
+    if (!confirm("Are you sure you want to delete this resume?")) return;
+    if (isGuest) {
+      const saved = JSON.parse(localStorage.getItem('rf_guest') || '[]');
+      const newList = saved.filter(r => r.id !== id);
+      localStorage.setItem('rf_guest', JSON.stringify(newList));
+      setResumes(newList);
+      if (currentResume?.id === id) { setCurrentResume(null); setScreen('dashboard'); }
+      return;
+    }
+    try {
+      const res = await fetch(`${API_BASE_URL}/resumes/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders()
+      });
+      if (res.ok) {
+        if (currentResume && currentResume.id === id) {
+          setCurrentResume(null);
+          setScreen('dashboard');
+        }
+        fetchResumes();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleExportDocx = (id) => {
+    if (isGuest) {
+      if (confirm('Word export requires a free account. Sign up now?')) {
+        localStorage.removeItem('guestMode');
+        setIsGuest(false);
+        setScreen('auth');
+        setResumes([]);
+      }
+      return;
+    }
+    window.open(`${API_BASE_URL}/resumes/${id}/export/docx?token=${token}`, '_blank');
+  };
+
+  const handleExportPdf = () => {
+    window.print();
+  };
+
+  const handleImportFile = async (file) => {
+    if (isGuest) {
+      if (confirm('File import requires a free account to process. Sign up now?')) {
+        localStorage.removeItem('guestMode');
+        setIsGuest(false);
+        setScreen('auth');
+        setResumes([]);
+      }
+      return;
+    }
+    if (!file) return;
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (!['pdf', 'docx'].includes(ext)) {
+      setImportError('Only PDF and DOCX files are supported.');
+      return;
+    }
+    setImporting(true);
+    setImportError('');
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const parseRes = await fetch(`${API_BASE_URL}/parse-resume`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+      if (!parseRes.ok) {
+        const err = await parseRes.json();
+        throw new Error(err.detail || 'Failed to parse resume');
+      }
+      const parsed = await parseRes.json();
+      const createRes = await fetch(`${API_BASE_URL}/resumes`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({
+          title: parsed.suggested_title || 'Imported Resume',
+          template_name: 'classic',
+          content: {
+            personal_info: parsed.personal_info,
+            experience:    parsed.experience,
+            education:     parsed.education,
+            skills:        parsed.skills,
+            projects:      parsed.projects,
+          },
+        }),
+      });
+      if (createRes.ok) {
+        const newResume = await createRes.json();
+        setCurrentResume(newResume);
+        setScreen('editor');
+        fetchResumes();
+      }
+    } catch (err) {
+      setImportError(err.message);
+    } finally {
+      setImporting(false);
+    }
+  };
+
+  const handleDropFile = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) handleImportFile(file);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    if (!e.relatedTarget || !e.currentTarget.contains(e.relatedTarget)) {
+      setIsDragging(false);
+    }
+  };
+
+  const loadDogfoodData = () => {
+    if (!currentResume) return;
+    setCurrentResume({
+      ...currentResume,
+      title: "Antigravity's Professional Resume",
+      content: JSON.parse(JSON.stringify(ANTIGRAVITY_RESUME))
+    });
+  };
+
+  // Safe input update helper
+  const updatePersonalInfo = (field, value) => {
+    setCurrentResume({
+      ...currentResume,
+      content: {
+        ...currentResume.content,
+        personal_info: {
+          ...currentResume.content.personal_info,
+          [field]: value
+        }
+      }
+    });
+  };
+
+  const updateListField = (section, index, field, value) => {
+    const list = [...(currentResume.content[section] || [])];
+    list[index] = { ...list[index], [field]: value };
+    setCurrentResume({
+      ...currentResume,
+      content: {
+        ...currentResume.content,
+        [section]: list
+      }
+    });
+  };
+
+  const addListField = (section, defaultObj) => {
+    const list = [...(currentResume.content[section] || [])];
+    setCurrentResume({
+      ...currentResume,
+      content: {
+        ...currentResume.content,
+        [section]: [...list, defaultObj]
+      }
+    });
+  };
+
+  const removeListField = (section, index) => {
+    const list = [...(currentResume.content[section] || [])];
+    list.splice(index, 1);
+    setCurrentResume({
+      ...currentResume,
+      content: {
+        ...currentResume.content,
+        [section]: list
+      }
+    });
+  };
+
+  return (
+    <div className="min-h-screen bg-bgStart text-textMain font-sans flex flex-col">
+      <Header 
+        token={token} 
+        isGuest={isGuest} 
+        user={user} 
+        screen={screen} 
+        setScreen={setScreen} 
+        handleLogout={handleLogout} 
+      />
+
+      <div className="flex-1 overflow-auto relative">
+        <AnimatePresence mode="wait">
+          {screen === 'auth' && (
+            <Auth
+              key="auth"
+              authMode={authMode}
+              setAuthMode={setAuthMode}
+              authEmail={authEmail}
+              setAuthEmail={setAuthEmail}
+              authPassword={authPassword}
+              setAuthPassword={setAuthPassword}
+              handleAuth={handleAuth}
+              authError={authError}
+              loading={loading}
+              handleGuestMode={handleGuestMode}
+            />
+          )}
+
+          {screen === 'dashboard' && (
+            <Dashboard
+              key="dashboard"
+              isGuest={isGuest}
+              setIsGuest={setIsGuest}
+              setScreen={setScreen}
+              setResumes={setResumes}
+              handleCreateResume={handleCreateResume}
+              loading={loading}
+              resumes={resumes}
+              handleDeleteResume={handleDeleteResume}
+              handleExportDocx={handleExportDocx}
+              setCurrentResume={setCurrentResume}
+              isDragging={isDragging}
+              importing={importing}
+              handleDropFile={handleDropFile}
+              handleDragOver={handleDragOver}
+              handleDragLeave={handleDragLeave}
+              fileInputRef={fileInputRef}
+              handleImportFile={handleImportFile}
+            />
+          )}
+
+          {screen === 'editor' && currentResume && (
+            <Editor
+              key="editor"
+              currentResume={currentResume}
+              setCurrentResume={setCurrentResume}
+              saving={saving}
+              handleSaveResume={handleSaveResume}
+              handleExportDocx={handleExportDocx}
+              handleExportPdf={handleExportPdf}
+              loadDogfoodData={loadDogfoodData}
+              activeAccordion={activeAccordion}
+              setActiveAccordion={setActiveAccordion}
+              updatePersonalInfo={updatePersonalInfo}
+              handleImageUpload={handleImageUpload}
+              updateListField={updateListField}
+              removeListField={removeListField}
+              addListField={addListField}
+            />
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
