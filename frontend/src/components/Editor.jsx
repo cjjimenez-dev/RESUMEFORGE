@@ -1,7 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Save, Download, RefreshCw, User, Briefcase, GraduationCap, Code, Star, ChevronDown, ChevronUp, Trash2, Plus } from 'lucide-react';
 import { ClassicTemplate, ModernTemplate, CreativeTemplate } from './ResumeTemplates';
+import ImageCropperModal from './ImageCropperModal';
 
 export function Editor({
   currentResume, setCurrentResume, saving, handleSaveResume, handleExportDocx, handleExportPdf, loadDogfoodData,
@@ -17,6 +18,26 @@ export function Editor({
   const templates = ['classic', 'modern', 'creative'];
   const paperSizes = ['a4', 'letter', 'legal'];
   const paperSize = currentResume.paper_size || 'a4';
+
+  const [cropperOpen, setCropperOpen] = useState(false);
+  const [cropperSrc, setCropperSrc] = useState(null);
+
+  const handleLocalImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setCropperSrc(reader.result);
+        setCropperOpen(true);
+      };
+      reader.readAsDataURL(file);
+    }
+    e.target.value = '';
+  };
+
+  const handleCropComplete = (croppedImageBase64) => {
+    updatePersonalInfo('image', croppedImageBase64);
+  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] lg:grid-cols-[480px_1fr] h-[calc(100vh-65px)] overflow-hidden print:block print:h-auto print:overflow-visible">
@@ -71,7 +92,7 @@ export function Editor({
                 >
                   <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Profile Image (Optional)</label>
-                    <input type="file" accept="image/*" onChange={handleImageUpload} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:bg-slate-800 file:text-textMain hover:file:bg-slate-700 bg-slate-900 border border-borderDark rounded p-1 text-textMuted"/>
+                    <input type="file" accept="image/*" onChange={handleLocalImageUpload} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:bg-slate-800 file:text-textMain hover:file:bg-slate-700 bg-slate-900 border border-borderDark rounded p-1 text-textMuted"/>
                     {currentResume.content?.personal_info?.image && (
                       <div className="flex flex-col gap-3 mt-2 border border-slate-800 bg-slate-900/50 p-3 rounded">
                         <div className="flex items-center gap-3">
@@ -411,6 +432,14 @@ export function Editor({
           </div>
         </div>
       </div>
+
+      <ImageCropperModal
+        isOpen={cropperOpen}
+        onClose={() => setCropperOpen(false)}
+        imageSrc={cropperSrc}
+        onCropComplete={handleCropComplete}
+        shape={currentResume.content?.personal_info?.image_shape || 'circle'}
+      />
     </div>
   );
 }
