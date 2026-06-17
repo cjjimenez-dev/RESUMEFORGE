@@ -73,7 +73,35 @@ export function Editor({
                     <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Profile Image (Optional)</label>
                     <input type="file" accept="image/*" onChange={handleImageUpload} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:bg-slate-800 file:text-textMain hover:file:bg-slate-700 bg-slate-900 border border-borderDark rounded p-1 text-textMuted"/>
                     {currentResume.content?.personal_info?.image && (
-                      <button className="mt-2 w-fit px-3 py-1 bg-red-500/10 text-red-400 text-xs rounded border border-red-500/20 hover:bg-red-500/20 transition-colors" onClick={() => updatePersonalInfo('image', null)}>Remove Image</button>
+                      <div className="flex flex-col gap-3 mt-2 border border-slate-800 bg-slate-900/50 p-3 rounded">
+                        <div className="flex items-center gap-4">
+                          <div className="flex flex-col gap-1.5 flex-1">
+                            <label className="text-[10px] font-medium text-textMuted uppercase tracking-wide">Image Position</label>
+                            <select 
+                              className="w-full bg-slate-800 border border-borderDark rounded px-2 py-1 text-xs text-textMain focus:outline-none focus:border-primary"
+                              value={currentResume.content?.personal_info?.image_position || 'center'}
+                              onChange={(e) => updatePersonalInfo('image_position', e.target.value)}
+                            >
+                              <option value="left">Left</option>
+                              <option value="center">Center</option>
+                              <option value="right">Right</option>
+                            </select>
+                          </div>
+                          <div className="flex flex-col gap-1.5 flex-1">
+                            <label className="text-[10px] font-medium text-textMuted uppercase tracking-wide">Image Size</label>
+                            <select 
+                              className="w-full bg-slate-800 border border-borderDark rounded px-2 py-1 text-xs text-textMain focus:outline-none focus:border-primary"
+                              value={currentResume.content?.personal_info?.image_size || 'medium'}
+                              onChange={(e) => updatePersonalInfo('image_size', e.target.value)}
+                            >
+                              <option value="small">Small</option>
+                              <option value="medium">Medium</option>
+                              <option value="large">Large</option>
+                            </select>
+                          </div>
+                        </div>
+                        <button className="w-full px-3 py-1.5 bg-red-500/10 text-red-400 text-xs rounded border border-red-500/20 hover:bg-red-500/20 transition-colors" onClick={() => updatePersonalInfo('image', null)}>Remove Image</button>
+                      </div>
                     )}
                   </div>
                   <div className="flex flex-col gap-1.5">

@@ -10,23 +10,40 @@ export function ClassicTemplate({ content }) {
   const projects = content?.projects || [];
   const skills = content?.skills || [];
 
+  const imgSize = info.image_size || 'medium';
+  const sizeClass = imgSize === 'small' ? 'w-20 h-20' : imgSize === 'large' ? 'w-36 h-36' : 'w-28 h-28';
+  const imgPos = info.image_position || 'center';
+
+  const getHeaderLayout = () => {
+    if (imgPos === 'left') {
+      return { container: "flex flex-row items-center border-b-2 border-slate-900 pb-4 mb-6 gap-6 text-left", textWrapper: "flex-1 flex flex-col items-start", contactWrapper: "flex flex-wrap justify-start gap-x-4 gap-y-1 text-sm text-slate-600", imgMargin: "mb-0" };
+    } else if (imgPos === 'right') {
+      return { container: "flex flex-row-reverse items-center border-b-2 border-slate-900 pb-4 mb-6 gap-6 text-right", textWrapper: "flex-1 flex flex-col items-end", contactWrapper: "flex flex-wrap justify-end gap-x-4 gap-y-1 text-sm text-slate-600", imgMargin: "mb-0" };
+    } else {
+      return { container: "flex flex-col items-center border-b-2 border-slate-900 pb-4 mb-6", textWrapper: "flex flex-col items-center text-center", contactWrapper: "flex flex-wrap justify-center gap-x-4 gap-y-1 text-sm text-slate-600 text-center", imgMargin: "mb-3" };
+    }
+  };
+  const layout = getHeaderLayout();
+
   return (
     <div className="font-serif bg-white text-slate-900 p-10 min-h-full w-full">
-      <div className="flex flex-col items-center border-b-2 border-slate-900 pb-4 mb-6">
+      <div className={layout.container}>
         {info.image && (
-          <div className="w-24 h-24 rounded-full overflow-hidden mb-3 border-2 border-slate-300">
+          <div className={`${sizeClass} rounded-full overflow-hidden ${layout.imgMargin} border-2 border-slate-300 shrink-0`}>
             <img src={info.image} alt="Profile" className="w-full h-full object-cover" />
           </div>
         )}
-        <h1 className="text-4xl font-bold uppercase tracking-widest text-slate-900 mb-1 text-center">{info.full_name || "Your Name"}</h1>
-        {info.title && <div className="text-lg text-slate-700 tracking-wide mb-2 text-center">{info.title}</div>}
-        <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-sm text-slate-600 text-center">
+        <div className={layout.textWrapper}>
+          <h1 className="text-4xl font-bold uppercase tracking-widest text-slate-900 mb-1">{info.full_name || "Your Name"}</h1>
+          {info.title && <div className="text-lg text-slate-700 tracking-wide mb-2">{info.title}</div>}
+          <div className={layout.contactWrapper}>
           {info.email && <span>{info.email}</span>}
           {info.phone && <span>{info.phone}</span>}
           {info.location && <span>{info.location}</span>}
           {info.website && <span>{info.website}</span>}
           {info.linkedin && <span>{info.linkedin}</span>}
           {info.github && <span>{info.github}</span>}
+          </div>
         </div>
       </div>
 
@@ -139,6 +156,11 @@ export function ModernTemplate({ content }) {
   const projects = content?.projects || [];
   const skills = content?.skills || [];
 
+  const imgSize = info.image_size || 'medium';
+  const sizeClass = imgSize === 'small' ? 'w-24 h-24' : imgSize === 'large' ? 'w-40 h-40' : 'w-32 h-32';
+  const imgPos = info.image_position || 'center';
+  const posClass = imgPos === 'left' ? 'mr-auto' : imgPos === 'right' ? 'ml-auto' : 'mx-auto';
+
   return (
     <div 
       className="font-sans grid grid-cols-[280px_1fr] min-h-full w-full"
@@ -147,7 +169,7 @@ export function ModernTemplate({ content }) {
       {/* Sidebar (Left) */}
       <div className="text-slate-100 p-10 flex flex-col gap-8 break-words print:text-slate-100">
         {info.image && (
-          <div className="w-32 h-32 rounded-full overflow-hidden mx-auto border-4 border-slate-600 shadow-lg">
+          <div className={`${sizeClass} rounded-full overflow-hidden ${posClass} border-4 border-slate-600 shadow-lg shrink-0`}>
             <img src={info.image} alt="Profile" className="w-full h-full object-cover" />
           </div>
         )}
@@ -292,14 +314,29 @@ export function CreativeTemplate({ content }) {
   const projects = content?.projects || [];
   const skills = content?.skills || [];
 
+  const imgSize = info.image_size || 'medium';
+  const sizeClass = imgSize === 'small' ? 'w-24 h-24' : imgSize === 'large' ? 'w-40 h-40' : 'w-32 h-32';
+  const imgPos = info.image_position || 'center';
+
+  const getCreativeLayout = () => {
+    if (imgPos === 'left') {
+      return { container: "mb-10 flex flex-row-reverse justify-end items-center gap-8", textWrapper: "flex-1 text-right", contactWrapper: "flex flex-wrap justify-end gap-4 text-sm font-medium text-slate-500 uppercase tracking-wider" };
+    } else if (imgPos === 'right') {
+      return { container: "mb-10 flex flex-row justify-between items-center gap-8", textWrapper: "flex-1 text-left", contactWrapper: "flex flex-wrap justify-start gap-4 text-sm font-medium text-slate-500 uppercase tracking-wider" };
+    } else {
+      return { container: "mb-10 flex flex-col items-center text-center gap-6", textWrapper: "flex flex-col items-center", contactWrapper: "flex flex-wrap justify-center gap-4 text-sm font-medium text-slate-500 uppercase tracking-wider" };
+    }
+  };
+  const layout = getCreativeLayout();
+
   return (
     <div className="font-display bg-white text-slate-800 p-12 min-h-full w-full">
-      <div className="mb-10 flex justify-between items-start gap-8">
-        <div>
+      <div className={layout.container}>
+        <div className={layout.textWrapper}>
           <h1 className="text-5xl font-black tracking-tight text-slate-900 mb-2">{info.full_name || "Your Name"}</h1>
           {info.title && <div className="text-2xl text-teal-600 font-light mb-6">// {info.title}</div>}
           
-          <div className="flex flex-wrap gap-4 text-sm font-medium text-slate-500 uppercase tracking-wider">
+          <div className={layout.contactWrapper}>
             {info.email && <span>[ {info.email} ]</span>}
             {info.phone && <span>[ {info.phone} ]</span>}
             {info.location && <span>[ {info.location} ]</span>}
@@ -309,7 +346,7 @@ export function CreativeTemplate({ content }) {
           </div>
         </div>
         {info.image && (
-          <div className="w-28 h-28 rounded-2xl overflow-hidden border-4 border-slate-100 shadow-md rotate-3 shrink-0">
+          <div className={`${sizeClass} rounded-2xl overflow-hidden border-4 border-slate-100 shadow-md rotate-3 shrink-0`}>
             <img src={info.image} alt="Profile" className="w-full h-full object-cover" />
           </div>
         )}
