@@ -74,9 +74,9 @@ export function Editor({
                     <input type="file" accept="image/*" onChange={handleImageUpload} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:bg-slate-800 file:text-textMain hover:file:bg-slate-700 bg-slate-900 border border-borderDark rounded p-1 text-textMuted"/>
                     {currentResume.content?.personal_info?.image && (
                       <div className="flex flex-col gap-3 mt-2 border border-slate-800 bg-slate-900/50 p-3 rounded">
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-3">
                           <div className="flex flex-col gap-1.5 flex-1">
-                            <label className="text-[10px] font-medium text-textMuted uppercase tracking-wide">Image Position</label>
+                            <label className="text-[10px] font-medium text-textMuted uppercase tracking-wide">Position</label>
                             <select 
                               className="w-full bg-slate-800 border border-borderDark rounded px-2 py-1 text-xs text-textMain focus:outline-none focus:border-primary"
                               value={currentResume.content?.personal_info?.image_position || 'center'}
@@ -88,7 +88,7 @@ export function Editor({
                             </select>
                           </div>
                           <div className="flex flex-col gap-1.5 flex-1">
-                            <label className="text-[10px] font-medium text-textMuted uppercase tracking-wide">Image Size</label>
+                            <label className="text-[10px] font-medium text-textMuted uppercase tracking-wide">Size</label>
                             <select 
                               className="w-full bg-slate-800 border border-borderDark rounded px-2 py-1 text-xs text-textMain focus:outline-none focus:border-primary"
                               value={currentResume.content?.personal_info?.image_size || 'medium'}
@@ -97,6 +97,17 @@ export function Editor({
                               <option value="small">Small</option>
                               <option value="medium">Medium</option>
                               <option value="large">Large</option>
+                            </select>
+                          </div>
+                          <div className="flex flex-col gap-1.5 flex-1">
+                            <label className="text-[10px] font-medium text-textMuted uppercase tracking-wide">Shape</label>
+                            <select 
+                              className="w-full bg-slate-800 border border-borderDark rounded px-2 py-1 text-xs text-textMain focus:outline-none focus:border-primary"
+                              value={currentResume.content?.personal_info?.image_shape || 'circle'}
+                              onChange={(e) => updatePersonalInfo('image_shape', e.target.value)}
+                            >
+                              <option value="circle">Circle</option>
+                              <option value="square">Square</option>
                             </select>
                           </div>
                         </div>
