@@ -17,7 +17,7 @@ export function Editor({
   const templates = ['classic', 'modern', 'creative'];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] lg:grid-cols-[480px_1fr] h-[calc(100vh-65px)] overflow-hidden">
+    <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] lg:grid-cols-[480px_1fr] h-[calc(100vh-65px)] overflow-hidden print:block print:h-auto print:overflow-visible">
       {/* LEFT PANEL: FORM EDITOR */}
       <div className="flex flex-col bg-slate-950 border-r border-borderDark overflow-hidden no-print">
         <div className="p-4 border-b border-borderDark bg-slate-900 flex flex-col gap-3 shrink-0">
@@ -319,7 +319,7 @@ export function Editor({
       </div>
 
       {/* RIGHT PANEL: LIVE PREVIEW */}
-      <div className="flex flex-col bg-slate-800 overflow-hidden relative">
+      <div className="flex flex-col bg-slate-800 overflow-hidden relative print:block print:overflow-visible">
         <div className="bg-slate-900 border-b border-borderDark px-4 py-2 flex items-center justify-between z-10 shrink-0 no-print">
           <div className="flex items-center gap-3">
             <span className="text-xs font-semibold uppercase tracking-wider text-textMuted">Template:</span>
@@ -340,7 +340,7 @@ export function Editor({
           </div>
         </div>
         
-        <div className="flex-1 overflow-auto p-4 md:p-8 flex justify-center bg-slate-800 custom-scrollbar print:p-0 print:bg-transparent print:overflow-visible">
+        <div className="flex-1 overflow-auto p-4 md:p-8 flex justify-center bg-slate-800 custom-scrollbar print:p-0 print:bg-transparent print:overflow-visible print:block">
           <div className="resume-paper" ref={printRef}>
             {currentResume.template_name === 'classic' && <ClassicTemplate content={currentResume.content} />}
             {currentResume.template_name === 'modern' && <ModernTemplate content={currentResume.content} />}

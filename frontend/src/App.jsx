@@ -516,7 +516,7 @@ export default function App() {
         handleLogout={handleLogout} 
       />
 
-      <div className="flex-1 overflow-auto relative">
+      <div className="flex-1 overflow-auto relative print:overflow-visible">
         <AnimatePresence mode="wait">
           {screen === 'auth' && (
             <Auth
