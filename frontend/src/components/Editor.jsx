@@ -15,6 +15,8 @@ export function Editor({
   };
 
   const templates = ['classic', 'modern', 'creative'];
+  const paperSizes = ['a4', 'letter', 'legal'];
+  const paperSize = currentResume.paper_size || 'a4';
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] lg:grid-cols-[480px_1fr] h-[calc(100vh-65px)] overflow-hidden print:block print:h-auto print:overflow-visible">
@@ -335,13 +337,35 @@ export function Editor({
               ))}
             </div>
           </div>
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-semibold uppercase tracking-wider text-textMuted">Paper:</span>
+            <div className="flex bg-slate-800 rounded p-1 border border-borderDark">
+              {paperSizes.map(size => (
+                <button
+                  key={size}
+                  className={`px-3 py-1 text-xs font-medium rounded capitalize transition-colors ${paperSize === size ? 'bg-slate-600 text-white shadow' : 'text-textMuted hover:text-textMain'}`}
+                  onClick={() => setCurrentResume({ ...currentResume, paper_size: size })}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="text-xs text-textMuted hidden md:block">
             Changes save automatically
           </div>
         </div>
         
         <div className="flex-1 overflow-auto p-4 md:p-8 flex justify-center bg-slate-800 custom-scrollbar print:p-0 print:bg-transparent print:overflow-visible print:block">
-          <div className="resume-paper" ref={printRef}>
+          <style>{`
+            @media print {
+              @page {
+                size: ${paperSize === 'letter' ? 'letter portrait' : paperSize === 'legal' ? 'legal portrait' : 'A4 portrait'};
+                margin: 0;
+              }
+            }
+          `}</style>
+          <div className={`resume-paper paper-${paperSize}`} ref={printRef}>
             {currentResume.template_name === 'classic' && <ClassicTemplate content={currentResume.content} />}
             {currentResume.template_name === 'modern' && <ModernTemplate content={currentResume.content} />}
             {currentResume.template_name === 'creative' && <CreativeTemplate content={currentResume.content} />}

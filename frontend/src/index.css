@@ -9,11 +9,21 @@
 }
 
 @layer components {
-  /* Keep resume-paper specific styling for the live preview A4 aspect ratio */
+  /* Keep resume-paper specific styling for the live preview aspect ratio */
   .resume-paper {
+    @apply bg-white shadow-xl mx-auto my-0 relative box-border break-words;
+  }
+  .paper-a4 {
     width: 210mm;
     min-height: 297mm;
-    @apply bg-white shadow-xl mx-auto my-0 relative box-border break-words;
+  }
+  .paper-letter {
+    width: 8.5in;
+    min-height: 11in;
+  }
+  .paper-legal {
+    width: 8.5in;
+    min-height: 14in;
   }
 
   /* Import dragging overlay */
@@ -66,7 +76,6 @@
   }
 
   @page {
-    size: A4 portrait;
     margin: 0;
   }
 }
