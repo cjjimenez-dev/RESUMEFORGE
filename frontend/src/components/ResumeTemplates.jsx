@@ -107,11 +107,16 @@ export function ClassicTemplate({ content }) {
                 if (curr.name) acc[cat].push(curr.name);
                 return acc;
               }, {})
-            ).map(([cat, list]) => (
-              <div key={cat} className="text-sm text-slate-800">
-                <span className="font-bold mr-2 text-slate-900">{cat}:</span> {list.join(', ')}
-              </div>
-            ))}
+            ).map(([cat, list]) => {
+              const skillTags = list.flatMap(item => item.split(',').map(s => s.trim()).filter(Boolean));
+              return (
+                <div key={cat} className="text-sm text-slate-800">
+                  <span className="font-bold mr-2 text-slate-900">{cat}:</span> {skillTags.map((tag, i) => (
+                    <span key={i} className="inline-block px-2 py-0.5 mr-1 mb-1 bg-slate-100 border border-slate-200 rounded text-xs">{tag}</span>
+                  ))}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
@@ -166,12 +171,21 @@ export function ModernTemplate({ content }) {
                   if (curr.name) acc[cat].push(curr.name);
                   return acc;
                 }, {})
-              ).map(([cat, list]) => (
-                <div key={cat} className="text-sm">
-                  <div className="text-xs text-orange-400 uppercase tracking-wider mb-1">{cat}</div>
-                  <div className="text-slate-300 leading-relaxed">{list.join(', ')}</div>
-                </div>
-              ))}
+              ).map(([cat, list]) => {
+                const skillTags = list.flatMap(item => item.split(',').map(s => s.trim()).filter(Boolean));
+                return (
+                  <div key={cat} className="text-sm">
+                    <div className="text-xs text-orange-400 uppercase tracking-wider mb-2">{cat}</div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {skillTags.map((tag, i) => (
+                        <span key={i} className="px-2 py-1 bg-slate-700/50 text-slate-200 text-[11px] font-medium tracking-wide rounded border border-slate-600/50">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
@@ -377,18 +391,21 @@ export function CreativeTemplate({ content }) {
                 if (curr.name) acc[cat].push(curr.name);
                 return acc;
               }, {})
-            ).map(([cat, list]) => (
-              <div key={cat} className="grid grid-cols-[180px_1fr] gap-6 items-start">
-                <div className="text-sm font-bold text-slate-900">{cat}</div>
-                <div className="flex flex-wrap gap-2">
-                  {list.map((n, i) => (
-                    <span key={i} className="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-semibold rounded-full border border-slate-200">
-                      {n}
-                    </span>
-                  ))}
+            ).map(([cat, list]) => {
+              const skillTags = list.flatMap(item => item.split(',').map(s => s.trim()).filter(Boolean));
+              return (
+                <div key={cat} className="grid grid-cols-[180px_1fr] gap-6 items-start">
+                  <div className="text-sm font-bold text-slate-900">{cat}</div>
+                  <div className="flex flex-wrap gap-2">
+                    {skillTags.map((n, i) => (
+                      <span key={i} className="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-semibold rounded-full border border-slate-200">
+                        {n}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
