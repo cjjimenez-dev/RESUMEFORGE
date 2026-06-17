@@ -11,7 +11,7 @@ export function ClassicTemplate({ content }) {
   const skills = content?.skills || [];
 
   return (
-    <div className="font-serif bg-white text-slate-900 p-10 h-full w-full">
+    <div className="font-serif bg-white text-slate-900 p-10 min-h-full w-full">
       <div className="text-center border-b-2 border-slate-900 pb-4 mb-6">
         <h1 className="text-4xl font-bold uppercase tracking-widest text-slate-900 mb-1">{info.full_name || "Your Name"}</h1>
         {info.title && <div className="text-lg text-slate-700 tracking-wide mb-2">{info.title}</div>}
@@ -130,7 +130,7 @@ export function ModernTemplate({ content }) {
   const skills = content?.skills || [];
 
   return (
-    <div className="font-sans grid grid-cols-[280px_1fr] min-h-[1050px] bg-white h-full w-full">
+    <div className="font-sans grid grid-cols-[280px_1fr] min-h-full bg-white w-full">
       {/* Sidebar (Left) */}
       <div className="bg-slate-800 text-slate-100 p-10 flex flex-col gap-8 break-words print:bg-slate-800 print:text-slate-100 print:color-adjust-exact">
         {info.image && (
@@ -271,7 +271,7 @@ export function CreativeTemplate({ content }) {
   const skills = content?.skills || [];
 
   return (
-    <div className="font-display bg-white text-slate-800 p-12 h-full w-full">
+    <div className="font-display bg-white text-slate-800 p-12 min-h-full w-full">
       <div className="mb-10">
         <h1 className="text-5xl font-black tracking-tight text-slate-900 mb-2">{info.full_name || "Your Name"}</h1>
         {info.title && <div className="text-2xl text-teal-600 font-light mb-6">// {info.title}</div>}
