@@ -10,9 +10,6 @@ export function ClassicTemplate({ content }) {
   const projects = content?.projects || [];
   const skills = content?.skills || [];
 
-  const imgSize = info.image_size || 'medium';
-  const sizeClass = imgSize === 'small' ? 'w-20 h-20' : imgSize === 'large' ? 'w-36 h-36' : 'w-28 h-28';
-  const imgPos = info.image_position || 'center';
 
   const imgSize = info.image_size || 'medium';
   const sizeClass = imgSize === 'small' ? 'w-20 h-20' : imgSize === 'large' ? 'w-36 h-36' : 'w-28 h-28';
