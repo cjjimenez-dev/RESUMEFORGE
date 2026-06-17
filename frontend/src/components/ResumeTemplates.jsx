@@ -12,10 +12,15 @@ export function ClassicTemplate({ content }) {
 
   return (
     <div className="font-serif bg-white text-slate-900 p-10 min-h-full w-full">
-      <div className="text-center border-b-2 border-slate-900 pb-4 mb-6">
-        <h1 className="text-4xl font-bold uppercase tracking-widest text-slate-900 mb-1">{info.full_name || "Your Name"}</h1>
-        {info.title && <div className="text-lg text-slate-700 tracking-wide mb-2">{info.title}</div>}
-        <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-sm text-slate-600">
+      <div className="flex flex-col items-center border-b-2 border-slate-900 pb-4 mb-6">
+        {info.image && (
+          <div className="w-24 h-24 rounded-full overflow-hidden mb-3 border-2 border-slate-300">
+            <img src={info.image} alt="Profile" className="w-full h-full object-cover" />
+          </div>
+        )}
+        <h1 className="text-4xl font-bold uppercase tracking-widest text-slate-900 mb-1 text-center">{info.full_name || "Your Name"}</h1>
+        {info.title && <div className="text-lg text-slate-700 tracking-wide mb-2 text-center">{info.title}</div>}
+        <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-sm text-slate-600 text-center">
           {info.email && <span>{info.email}</span>}
           {info.phone && <span>{info.phone}</span>}
           {info.location && <span>{info.location}</span>}
@@ -289,18 +294,25 @@ export function CreativeTemplate({ content }) {
 
   return (
     <div className="font-display bg-white text-slate-800 p-12 min-h-full w-full">
-      <div className="mb-10">
-        <h1 className="text-5xl font-black tracking-tight text-slate-900 mb-2">{info.full_name || "Your Name"}</h1>
-        {info.title && <div className="text-2xl text-teal-600 font-light mb-6">// {info.title}</div>}
-        
-        <div className="flex flex-wrap gap-4 text-sm font-medium text-slate-500 uppercase tracking-wider">
-          {info.email && <span>[ {info.email} ]</span>}
-          {info.phone && <span>[ {info.phone} ]</span>}
-          {info.location && <span>[ {info.location} ]</span>}
-          {info.website && <span>[ {info.website} ]</span>}
-          {info.linkedin && <span>[ {info.linkedin} ]</span>}
-          {info.github && <span>[ {info.github} ]</span>}
+      <div className="mb-10 flex justify-between items-start gap-8">
+        <div>
+          <h1 className="text-5xl font-black tracking-tight text-slate-900 mb-2">{info.full_name || "Your Name"}</h1>
+          {info.title && <div className="text-2xl text-teal-600 font-light mb-6">// {info.title}</div>}
+          
+          <div className="flex flex-wrap gap-4 text-sm font-medium text-slate-500 uppercase tracking-wider">
+            {info.email && <span>[ {info.email} ]</span>}
+            {info.phone && <span>[ {info.phone} ]</span>}
+            {info.location && <span>[ {info.location} ]</span>}
+            {info.website && <span>[ {info.website} ]</span>}
+            {info.linkedin && <span>[ {info.linkedin} ]</span>}
+            {info.github && <span>[ {info.github} ]</span>}
+          </div>
         </div>
+        {info.image && (
+          <div className="w-28 h-28 rounded-2xl overflow-hidden border-4 border-slate-100 shadow-md rotate-3 shrink-0">
+            <img src={info.image} alt="Profile" className="w-full h-full object-cover" />
+          </div>
+        )}
       </div>
 
       {info.summary && (
