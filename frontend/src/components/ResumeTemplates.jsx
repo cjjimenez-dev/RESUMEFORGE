@@ -135,9 +135,12 @@ export function ModernTemplate({ content }) {
   const skills = content?.skills || [];
 
   return (
-    <div className="font-sans grid grid-cols-[280px_1fr] min-h-full bg-white w-full">
+    <div 
+      className="font-sans grid grid-cols-[280px_1fr] min-h-full w-full"
+      style={{ background: 'linear-gradient(to right, #1e293b 0%, #1e293b 280px, white 280px, white 100%)' }}
+    >
       {/* Sidebar (Left) */}
-      <div className="bg-slate-800 text-slate-100 p-10 flex flex-col gap-8 break-words print:bg-slate-800 print:text-slate-100 print:color-adjust-exact">
+      <div className="text-slate-100 p-10 flex flex-col gap-8 break-words print:text-slate-100">
         {info.image && (
           <div className="w-32 h-32 rounded-full overflow-hidden mx-auto border-4 border-slate-600 shadow-lg">
             <img src={info.image} alt="Profile" className="w-full h-full object-cover" />
