@@ -67,15 +67,15 @@ export function Editor({
   return (
     <div className="flex flex-col h-[calc(100vh-65px)] overflow-hidden print:block print:h-auto print:overflow-visible">
       {/* MOBILE TABS */}
-      <div className="flex md:hidden bg-slate-900 border-b border-borderDark shrink-0 no-print">
+      <div className="flex md:hidden bg-surface border-b border-border shrink-0 no-print">
         <button 
-          className={`flex-1 py-3 text-sm font-medium transition-colors ${mobileTab === 'edit' ? 'text-primary border-b-2 border-primary bg-primary/5' : 'text-textMuted hover:text-textMain'}`} 
+          className={`flex-1 py-3 text-sm font-medium transition-colors ${mobileTab === 'edit' ? 'text-primary border-b-2 border-primary bg-primary/5' : 'text-muted hover:text-foreground'}`} 
           onClick={() => setMobileTab('edit')}
         >
           Edit Info
         </button>
         <button 
-          className={`flex-1 py-3 text-sm font-medium transition-colors ${mobileTab === 'preview' ? 'text-primary border-b-2 border-primary bg-primary/5' : 'text-textMuted hover:text-textMain'}`} 
+          className={`flex-1 py-3 text-sm font-medium transition-colors ${mobileTab === 'preview' ? 'text-primary border-b-2 border-primary bg-primary/5' : 'text-muted hover:text-foreground'}`} 
           onClick={() => setMobileTab('preview')}
         >
           Live Preview
@@ -84,11 +84,11 @@ export function Editor({
 
       <div className="flex-1 grid grid-cols-1 md:grid-cols-[1fr_1fr] lg:grid-cols-[480px_1fr] overflow-hidden">
         {/* LEFT PANEL: FORM EDITOR */}
-        <div className={`${mobileTab === 'edit' ? 'flex' : 'hidden'} md:flex flex-col bg-slate-950 border-r border-borderDark overflow-hidden no-print h-full`}>
-        <div className="p-4 border-b border-borderDark bg-slate-900 flex flex-col gap-3 shrink-0">
+        <div className={`${mobileTab === 'edit' ? 'flex' : 'hidden'} md:flex flex-col bg-background border-r border-border overflow-hidden no-print h-full`}>
+        <div className="p-4 border-b border-border bg-surface flex flex-col gap-3 shrink-0">
           <input 
             type="text" 
-            className="w-full bg-transparent text-lg font-semibold text-textMain focus:outline-none focus:border-b focus:border-primary px-1 pb-1"
+            className="w-full bg-transparent text-lg font-semibold text-foreground focus:outline-none focus:border-b focus:border-primary px-1 pb-1"
             value={currentResume.title} 
             onChange={(e) => setCurrentResume({ ...currentResume, title: e.target.value })}
             placeholder="Resume Title"
@@ -98,11 +98,11 @@ export function Editor({
               <Save size={14} />
               {saving ? 'Saving...' : 'Save'}
             </button>
-            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-textMain text-sm rounded border border-borderDark transition-colors" onClick={() => handleExportDocx(currentResume.id)}>
+            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-surfaceHover hover:bg-surfaceHover text-foreground text-sm rounded border border-border transition-colors" onClick={() => handleExportDocx(currentResume.id)}>
               <Download size={14} />
               Word
             </button>
-            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-textMain text-sm rounded border border-borderDark transition-colors" onClick={handleExportPdf}>
+            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-surfaceHover hover:bg-surfaceHover text-foreground text-sm rounded border border-border transition-colors" onClick={handleExportPdf}>
               <Download size={14} />
               PDF
             </button>
@@ -112,19 +112,19 @@ export function Editor({
 
         <div className="flex-1 min-h-0 overflow-y-auto p-4 flex flex-col gap-3 custom-scrollbar">
           {/* 1. PERSONAL INFO Accordion */}
-          <div className="bg-cardBg border border-borderDark rounded-lg overflow-hidden shrink-0">
+          <div className="bg-surface border border-border rounded-lg overflow-hidden shrink-0">
             <div 
               className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors select-none"
               onClick={() => setActiveAccordion(activeAccordion === 'personal' ? '' : 'personal')}
             >
-              <div className="flex items-center gap-2 font-semibold text-textMain text-sm uppercase tracking-wider">
-                <User size={16} className="text-textDim" />
+              <div className="flex items-center gap-2 font-semibold text-foreground text-sm uppercase tracking-wider">
+                <User size={16} className="text-secondary" />
                 Personal Information
                 {(currentResume.content?.personal_info?.full_name || currentResume.content?.personal_info?.email) && (
                   <span className="ml-1 px-1.5 py-0.5 bg-primary/20 text-primary text-[10px] font-bold rounded-full border border-primary/30">✓</span>
                 )}
               </div>
-              {activeAccordion === 'personal' ? <ChevronUp size={16} className="text-textDim" /> : <ChevronDown size={16} className="text-textDim" />}
+              {activeAccordion === 'personal' ? <ChevronUp size={16} className="text-secondary" /> : <ChevronDown size={16} className="text-secondary" />}
             </div>
             <AnimatePresence>
               {activeAccordion === 'personal' && (
@@ -133,15 +133,15 @@ export function Editor({
                   className="px-4 pb-4 flex flex-col gap-4"
                 >
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Profile Image (Optional)</label>
-                    <input type="file" accept="image/*" onChange={handleLocalImageUpload} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:bg-slate-800 file:text-textMain hover:file:bg-slate-700 bg-slate-900 border border-borderDark rounded p-1 text-textMuted"/>
+                    <label className="text-xs font-medium text-muted uppercase tracking-wide">Profile Image (Optional)</label>
+                    <input type="file" accept="image/*" onChange={handleLocalImageUpload} className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:bg-surfaceHover file:text-foreground hover:file:bg-surfaceHover bg-surface border border-border rounded p-1 text-muted"/>
                     {currentResume.content?.personal_info?.image && (
-                      <div className="flex flex-col gap-3 mt-2 border border-slate-800 bg-slate-900/50 p-3 rounded">
+                      <div className="flex flex-col gap-3 mt-2 border border-slate-800 bg-surface/50 p-3 rounded">
                         <div className="flex items-center gap-3">
                           <div className="flex flex-col gap-1.5 flex-1">
-                            <label className="text-[10px] font-medium text-textMuted uppercase tracking-wide">Position</label>
+                            <label className="text-[10px] font-medium text-muted uppercase tracking-wide">Position</label>
                             <select 
-                              className="w-full bg-slate-800 border border-borderDark rounded px-2 py-1 text-xs text-textMain focus:outline-none focus:border-primary"
+                              className="w-full bg-surfaceHover border border-border rounded px-2 py-1 text-xs text-foreground focus:outline-none focus:border-primary"
                               value={currentResume.content?.personal_info?.image_position || 'center'}
                               onChange={(e) => updatePersonalInfo('image_position', e.target.value)}
                             >
@@ -151,29 +151,29 @@ export function Editor({
                             </select>
                           </div>
                           <div className="flex flex-col gap-1.5 flex-1">
-                            <label className="text-[10px] font-medium text-textMuted uppercase tracking-wide">Size</label>
-                            <div className="flex items-center justify-between bg-slate-800 border border-borderDark rounded overflow-hidden h-[26px]">
+                            <label className="text-[10px] font-medium text-muted uppercase tracking-wide">Size</label>
+                            <div className="flex items-center justify-between bg-surfaceHover border border-border rounded overflow-hidden h-[26px]">
                               <button 
                                 onClick={() => updatePersonalInfo('image_size', Math.max(40, (typeof currentResume.content?.personal_info?.image_size === 'number' ? currentResume.content?.personal_info?.image_size : 120) - 10))} 
-                                className="px-2 h-full text-textMuted hover:text-white hover:bg-slate-700 transition-colors flex items-center justify-center"
+                                className="px-2 h-full text-muted hover:text-white hover:bg-surfaceHover transition-colors flex items-center justify-center"
                               >
                                 <Minus size={12} />
                               </button>
-                              <div className="flex-1 text-center text-xs text-textMain font-medium">
+                              <div className="flex-1 text-center text-xs text-foreground font-medium">
                                 {typeof currentResume.content?.personal_info?.image_size === 'number' ? currentResume.content?.personal_info?.image_size : 120}px
                               </div>
                               <button 
                                 onClick={() => updatePersonalInfo('image_size', Math.min(400, (typeof currentResume.content?.personal_info?.image_size === 'number' ? currentResume.content?.personal_info?.image_size : 120) + 10))} 
-                                className="px-2 h-full text-textMuted hover:text-white hover:bg-slate-700 transition-colors flex items-center justify-center"
+                                className="px-2 h-full text-muted hover:text-white hover:bg-surfaceHover transition-colors flex items-center justify-center"
                               >
                                 <Plus size={12} />
                               </button>
                             </div>
                           </div>
                           <div className="flex flex-col gap-1.5 flex-1">
-                            <label className="text-[10px] font-medium text-textMuted uppercase tracking-wide">Shape</label>
+                            <label className="text-[10px] font-medium text-muted uppercase tracking-wide">Shape</label>
                             <select 
-                              className="w-full bg-slate-800 border border-borderDark rounded px-2 py-1 text-xs text-textMain focus:outline-none focus:border-primary"
+                              className="w-full bg-surfaceHover border border-border rounded px-2 py-1 text-xs text-foreground focus:outline-none focus:border-primary"
                               value={currentResume.content?.personal_info?.image_shape || 'circle'}
                               onChange={(e) => updatePersonalInfo('image_shape', e.target.value)}
                             >
@@ -187,46 +187,46 @@ export function Editor({
                     )}
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Full Name</label>
-                    <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-2 text-sm text-textMain focus:outline-none focus:border-primary" value={currentResume.content?.personal_info?.full_name || ''} onChange={(e) => updatePersonalInfo('full_name', e.target.value)} placeholder="John Doe"/>
+                    <label className="text-xs font-medium text-muted uppercase tracking-wide">Full Name</label>
+                    <input type="text" className="w-full bg-surface border border-border rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary" value={currentResume.content?.personal_info?.full_name || ''} onChange={(e) => updatePersonalInfo('full_name', e.target.value)} placeholder="John Doe"/>
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Professional Title</label>
-                    <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-2 text-sm text-textMain focus:outline-none focus:border-primary" value={currentResume.content?.personal_info?.title || ''} onChange={(e) => updatePersonalInfo('title', e.target.value)} placeholder="Full Stack Software Engineer"/>
+                    <label className="text-xs font-medium text-muted uppercase tracking-wide">Professional Title</label>
+                    <input type="text" className="w-full bg-surface border border-border rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary" value={currentResume.content?.personal_info?.title || ''} onChange={(e) => updatePersonalInfo('title', e.target.value)} placeholder="Full Stack Software Engineer"/>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Email</label>
-                      <input type="email" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-2 text-sm text-textMain focus:outline-none focus:border-primary" value={currentResume.content?.personal_info?.email || ''} onChange={(e) => updatePersonalInfo('email', e.target.value)} placeholder="john.doe@example.com"/>
+                      <label className="text-xs font-medium text-muted uppercase tracking-wide">Email</label>
+                      <input type="email" className="w-full bg-surface border border-border rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary" value={currentResume.content?.personal_info?.email || ''} onChange={(e) => updatePersonalInfo('email', e.target.value)} placeholder="john.doe@example.com"/>
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Phone</label>
-                      <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-2 text-sm text-textMain focus:outline-none focus:border-primary" value={currentResume.content?.personal_info?.phone || ''} onChange={(e) => updatePersonalInfo('phone', e.target.value)} placeholder="+1 (555) 019-2834"/>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Location</label>
-                      <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-2 text-sm text-textMain focus:outline-none focus:border-primary" value={currentResume.content?.personal_info?.location || ''} onChange={(e) => updatePersonalInfo('location', e.target.value)} placeholder="San Francisco, CA"/>
-                    </div>
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Website</label>
-                      <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-2 text-sm text-textMain focus:outline-none focus:border-primary" value={currentResume.content?.personal_info?.website || ''} onChange={(e) => updatePersonalInfo('website', e.target.value)} placeholder="johndoe.dev"/>
+                      <label className="text-xs font-medium text-muted uppercase tracking-wide">Phone</label>
+                      <input type="text" className="w-full bg-surface border border-border rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary" value={currentResume.content?.personal_info?.phone || ''} onChange={(e) => updatePersonalInfo('phone', e.target.value)} placeholder="+1 (555) 019-2834"/>
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-medium text-textMuted uppercase tracking-wide">LinkedIn</label>
-                      <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-2 text-sm text-textMain focus:outline-none focus:border-primary" value={currentResume.content?.personal_info?.linkedin || ''} onChange={(e) => updatePersonalInfo('linkedin', e.target.value)} placeholder="linkedin.com/in/johndoe"/>
+                      <label className="text-xs font-medium text-muted uppercase tracking-wide">Location</label>
+                      <input type="text" className="w-full bg-surface border border-border rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary" value={currentResume.content?.personal_info?.location || ''} onChange={(e) => updatePersonalInfo('location', e.target.value)} placeholder="San Francisco, CA"/>
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-medium text-textMuted uppercase tracking-wide">GitHub</label>
-                      <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-2 text-sm text-textMain focus:outline-none focus:border-primary" value={currentResume.content?.personal_info?.github || ''} onChange={(e) => updatePersonalInfo('github', e.target.value)} placeholder="github.com/johndoe"/>
+                      <label className="text-xs font-medium text-muted uppercase tracking-wide">Website</label>
+                      <input type="text" className="w-full bg-surface border border-border rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary" value={currentResume.content?.personal_info?.website || ''} onChange={(e) => updatePersonalInfo('website', e.target.value)} placeholder="johndoe.dev"/>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-xs font-medium text-muted uppercase tracking-wide">LinkedIn</label>
+                      <input type="text" className="w-full bg-surface border border-border rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary" value={currentResume.content?.personal_info?.linkedin || ''} onChange={(e) => updatePersonalInfo('linkedin', e.target.value)} placeholder="linkedin.com/in/johndoe"/>
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-xs font-medium text-muted uppercase tracking-wide">GitHub</label>
+                      <input type="text" className="w-full bg-surface border border-border rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary" value={currentResume.content?.personal_info?.github || ''} onChange={(e) => updatePersonalInfo('github', e.target.value)} placeholder="github.com/johndoe"/>
                     </div>
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Professional Summary</label>
-                    <textarea rows={4} className="w-full bg-slate-900 border border-borderDark rounded px-3 py-2 text-sm text-textMain focus:outline-none focus:border-primary" value={currentResume.content?.personal_info?.summary || ''} onChange={(e) => updatePersonalInfo('summary', e.target.value)} placeholder="Write a brief, compelling introduction..."/>
+                    <label className="text-xs font-medium text-muted uppercase tracking-wide">Professional Summary</label>
+                    <textarea rows={4} className="w-full bg-surface border border-border rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary" value={currentResume.content?.personal_info?.summary || ''} onChange={(e) => updatePersonalInfo('summary', e.target.value)} placeholder="Write a brief, compelling introduction..."/>
                   </div>
                 </motion.div>
               )}
@@ -234,60 +234,60 @@ export function Editor({
           </div>
 
           {/* 2. EDUCATION Accordion */}
-          <div className="bg-cardBg border border-borderDark rounded-lg overflow-hidden shrink-0">
+          <div className="bg-surface border border-border rounded-lg overflow-hidden shrink-0">
             <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors select-none" onClick={() => setActiveAccordion(activeAccordion === 'education' ? '' : 'education')}>
-              <div className="flex items-center gap-2 font-semibold text-textMain text-sm uppercase tracking-wider">
-                <GraduationCap size={16} className="text-textDim" />
+              <div className="flex items-center gap-2 font-semibold text-foreground text-sm uppercase tracking-wider">
+                <GraduationCap size={16} className="text-secondary" />
                 Education
                 {(currentResume.content?.education?.length > 0) && (
                   <span className="ml-1 px-1.5 py-0.5 bg-primary/20 text-primary text-[10px] font-bold rounded-full border border-primary/30">{currentResume.content.education.length}</span>
                 )}
               </div>
-              {activeAccordion === 'education' ? <ChevronUp size={16} className="text-textDim" /> : <ChevronDown size={16} className="text-textDim" />}
+              {activeAccordion === 'education' ? <ChevronUp size={16} className="text-secondary" /> : <ChevronDown size={16} className="text-secondary" />}
             </div>
             <AnimatePresence>
               {activeAccordion === 'education' && (
                 <motion.div initial="collapsed" animate="open" exit="collapsed" variants={accordionVariants} transition={{ duration: 0.2 }} className="px-4 pb-4 flex flex-col gap-6">
                   {(currentResume.content?.education || []).map((edu, idx) => (
-                    <div key={idx} className="relative bg-slate-900/50 border border-borderDark rounded p-4 flex flex-col gap-4 group">
-                      <button className="absolute top-3 right-3 text-textDim hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => removeListField('education', idx)}>
+                    <div key={idx} className="relative bg-surface/50 border border-border rounded p-4 flex flex-col gap-4 group">
+                      <button className="absolute top-3 right-3 text-secondary hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => removeListField('education', idx)}>
                         <Trash2 size={14} />
                       </button>
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Degree</label>
-                        <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={edu.degree || ''} onChange={(e) => updateListField('education', idx, 'degree', e.target.value)} placeholder="B.S. Computer Science"/>
+                        <label className="text-xs font-medium text-muted uppercase tracking-wide">Degree</label>
+                        <input type="text" className="w-full bg-surface border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary" value={edu.degree || ''} onChange={(e) => updateListField('education', idx, 'degree', e.target.value)} placeholder="B.S. Computer Science"/>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-xs font-medium text-textMuted uppercase tracking-wide">School</label>
-                          <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={edu.school || ''} onChange={(e) => updateListField('education', idx, 'school', e.target.value)} placeholder="Stanford University"/>
+                          <label className="text-xs font-medium text-muted uppercase tracking-wide">School</label>
+                          <input type="text" className="w-full bg-surface border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary" value={edu.school || ''} onChange={(e) => updateListField('education', idx, 'school', e.target.value)} placeholder="Stanford University"/>
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Location</label>
-                          <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={edu.location || ''} onChange={(e) => updateListField('education', idx, 'location', e.target.value)} placeholder="Stanford, CA"/>
+                          <label className="text-xs font-medium text-muted uppercase tracking-wide">Location</label>
+                          <input type="text" className="w-full bg-surface border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary" value={edu.location || ''} onChange={(e) => updateListField('education', idx, 'location', e.target.value)} placeholder="Stanford, CA"/>
                         </div>
                       </div>
                       <div className="grid grid-cols-3 gap-4">
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Start Date</label>
-                          <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={edu.start_date || ''} onChange={(e) => updateListField('education', idx, 'start_date', e.target.value)} placeholder="Sep 2017"/>
+                          <label className="text-xs font-medium text-muted uppercase tracking-wide">Start Date</label>
+                          <input type="text" className="w-full bg-surface border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary" value={edu.start_date || ''} onChange={(e) => updateListField('education', idx, 'start_date', e.target.value)} placeholder="Sep 2017"/>
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-xs font-medium text-textMuted uppercase tracking-wide">End Date</label>
-                          <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={edu.end_date || ''} onChange={(e) => updateListField('education', idx, 'end_date', e.target.value)} placeholder="May 2021"/>
+                          <label className="text-xs font-medium text-muted uppercase tracking-wide">End Date</label>
+                          <input type="text" className="w-full bg-surface border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary" value={edu.end_date || ''} onChange={(e) => updateListField('education', idx, 'end_date', e.target.value)} placeholder="May 2021"/>
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-xs font-medium text-textMuted uppercase tracking-wide">GPA</label>
-                          <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={edu.gpa || ''} onChange={(e) => updateListField('education', idx, 'gpa', e.target.value)} placeholder="3.8/4.0"/>
+                          <label className="text-xs font-medium text-muted uppercase tracking-wide">GPA</label>
+                          <input type="text" className="w-full bg-surface border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary" value={edu.gpa || ''} onChange={(e) => updateListField('education', idx, 'gpa', e.target.value)} placeholder="3.8/4.0"/>
                         </div>
                       </div>
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Description</label>
-                        <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={edu.description || ''} onChange={(e) => updateListField('education', idx, 'description', e.target.value)} placeholder="Minor in Mathematics"/>
+                        <label className="text-xs font-medium text-muted uppercase tracking-wide">Description</label>
+                        <input type="text" className="w-full bg-surface border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary" value={edu.description || ''} onChange={(e) => updateListField('education', idx, 'description', e.target.value)} placeholder="Minor in Mathematics"/>
                       </div>
                     </div>
                   ))}
-                  <button className="flex items-center justify-center gap-1.5 w-full py-2 bg-slate-800 hover:bg-slate-700 text-textMain text-sm rounded border border-borderDark border-dashed transition-colors" onClick={() => addListField('education', { degree: "", school: "", location: "", start_date: "", end_date: "", gpa: "", description: "" })}>
+                  <button className="flex items-center justify-center gap-1.5 w-full py-2 bg-surfaceHover hover:bg-surfaceHover text-foreground text-sm rounded border border-border border-dashed transition-colors" onClick={() => addListField('education', { degree: "", school: "", location: "", start_date: "", end_date: "", gpa: "", description: "" })}>
                     <Plus size={14} /> Add Education
                   </button>
                 </motion.div>
@@ -296,63 +296,63 @@ export function Editor({
           </div>
 
           {/* 3. EXPERIENCE Accordion */}
-          <div className="bg-cardBg border border-borderDark rounded-lg overflow-hidden shrink-0">
+          <div className="bg-surface border border-border rounded-lg overflow-hidden shrink-0">
             <div 
               className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors select-none"
               onClick={() => setActiveAccordion(activeAccordion === 'experience' ? '' : 'experience')}
             >
-              <div className="flex items-center gap-2 font-semibold text-textMain text-sm uppercase tracking-wider">
-                <Briefcase size={16} className="text-textDim" />
+              <div className="flex items-center gap-2 font-semibold text-foreground text-sm uppercase tracking-wider">
+                <Briefcase size={16} className="text-secondary" />
                 Work Experience
                 {(currentResume.content?.experience?.length > 0) && (
                   <span className="ml-1 px-1.5 py-0.5 bg-primary/20 text-primary text-[10px] font-bold rounded-full border border-primary/30">{currentResume.content.experience.length}</span>
                 )}
               </div>
-              {activeAccordion === 'experience' ? <ChevronUp size={16} className="text-textDim" /> : <ChevronDown size={16} className="text-textDim" />}
+              {activeAccordion === 'experience' ? <ChevronUp size={16} className="text-secondary" /> : <ChevronDown size={16} className="text-secondary" />}
             </div>
             <AnimatePresence>
               {activeAccordion === 'experience' && (
                 <motion.div initial="collapsed" animate="open" exit="collapsed" variants={accordionVariants} transition={{ duration: 0.2 }} className="px-4 pb-4 flex flex-col gap-6">
                   {(currentResume.content?.experience || []).map((exp, idx) => (
-                    <div key={idx} className="relative bg-slate-900/50 border border-borderDark rounded p-4 flex flex-col gap-4 group">
-                      <button className="absolute top-3 right-3 text-textDim hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => removeListField('experience', idx)}>
+                    <div key={idx} className="relative bg-surface/50 border border-border rounded p-4 flex flex-col gap-4 group">
+                      <button className="absolute top-3 right-3 text-secondary hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => removeListField('experience', idx)}>
                         <Trash2 size={14} />
                       </button>
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Job Title</label>
-                        <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={exp.job_title || ''} onChange={(e) => updateListField('experience', idx, 'job_title', e.target.value)} placeholder="Senior Software Engineer"/>
+                        <label className="text-xs font-medium text-muted uppercase tracking-wide">Job Title</label>
+                        <input type="text" className="w-full bg-surface border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary" value={exp.job_title || ''} onChange={(e) => updateListField('experience', idx, 'job_title', e.target.value)} placeholder="Senior Software Engineer"/>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Company</label>
-                          <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={exp.company || ''} onChange={(e) => updateListField('experience', idx, 'company', e.target.value)} placeholder="Acme Corp"/>
+                          <label className="text-xs font-medium text-muted uppercase tracking-wide">Company</label>
+                          <input type="text" className="w-full bg-surface border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary" value={exp.company || ''} onChange={(e) => updateListField('experience', idx, 'company', e.target.value)} placeholder="Acme Corp"/>
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Location</label>
-                          <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={exp.location || ''} onChange={(e) => updateListField('experience', idx, 'location', e.target.value)} placeholder="New York, NY"/>
+                          <label className="text-xs font-medium text-muted uppercase tracking-wide">Location</label>
+                          <input type="text" className="w-full bg-surface border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary" value={exp.location || ''} onChange={(e) => updateListField('experience', idx, 'location', e.target.value)} placeholder="New York, NY"/>
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Start Date</label>
-                          <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={exp.start_date || ''} onChange={(e) => updateListField('experience', idx, 'start_date', e.target.value)} placeholder="Jun 2021"/>
+                          <label className="text-xs font-medium text-muted uppercase tracking-wide">Start Date</label>
+                          <input type="text" className="w-full bg-surface border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary" value={exp.start_date || ''} onChange={(e) => updateListField('experience', idx, 'start_date', e.target.value)} placeholder="Jun 2021"/>
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-xs font-medium text-textMuted uppercase tracking-wide">End Date</label>
-                          <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary disabled:opacity-50" value={exp.end_date || ''} onChange={(e) => updateListField('experience', idx, 'end_date', e.target.value)} placeholder="Present" disabled={exp.current}/>
+                          <label className="text-xs font-medium text-muted uppercase tracking-wide">End Date</label>
+                          <input type="text" className="w-full bg-surface border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary disabled:opacity-50" value={exp.end_date || ''} onChange={(e) => updateListField('experience', idx, 'end_date', e.target.value)} placeholder="Present" disabled={exp.current}/>
                         </div>
                       </div>
-                      <label className="flex items-center gap-2 text-sm text-textMuted cursor-pointer w-fit mt-[-0.5rem]">
-                        <input type="checkbox" className="rounded bg-slate-900 border-borderDark text-primary focus:ring-primary" checked={exp.current || false} onChange={(e) => updateListField('experience', idx, 'current', e.target.checked)}/>
+                      <label className="flex items-center gap-2 text-sm text-muted cursor-pointer w-fit mt-[-0.5rem]">
+                        <input type="checkbox" className="rounded bg-surface border-border text-primary focus:ring-primary" checked={exp.current || false} onChange={(e) => updateListField('experience', idx, 'current', e.target.checked)}/>
                         I currently work here
                       </label>
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Role Description</label>
-                        <textarea rows={3} className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={exp.description || ''} onChange={(e) => updateListField('experience', idx, 'description', e.target.value)} placeholder="• Bullet points of accomplishments..."/>
+                        <label className="text-xs font-medium text-muted uppercase tracking-wide">Role Description</label>
+                        <textarea rows={3} className="w-full bg-surface border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary" value={exp.description || ''} onChange={(e) => updateListField('experience', idx, 'description', e.target.value)} placeholder="• Bullet points of accomplishments..."/>
                       </div>
                     </div>
                   ))}
-                  <button className="flex items-center justify-center gap-1.5 w-full py-2 bg-slate-800 hover:bg-slate-700 text-textMain text-sm rounded border border-borderDark border-dashed transition-colors" onClick={() => addListField('experience', { job_title: "", company: "", location: "", start_date: "", end_date: "", current: false, description: "" })}>
+                  <button className="flex items-center justify-center gap-1.5 w-full py-2 bg-surfaceHover hover:bg-surfaceHover text-foreground text-sm rounded border border-border border-dashed transition-colors" onClick={() => addListField('experience', { job_title: "", company: "", location: "", start_date: "", end_date: "", current: false, description: "" })}>
                     <Plus size={14} /> Add Experience
                   </button>
                 </motion.div>
@@ -361,30 +361,30 @@ export function Editor({
           </div>
 
           {/* 4. SKILLS Accordion */}
-          <div className="bg-cardBg border border-borderDark rounded-lg overflow-hidden shrink-0">
+          <div className="bg-surface border border-border rounded-lg overflow-hidden shrink-0">
             <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors select-none" onClick={() => setActiveAccordion(activeAccordion === 'skills' ? '' : 'skills')}>
-              <div className="flex items-center gap-2 font-semibold text-textMain text-sm uppercase tracking-wider">
-                <Star size={16} className="text-textDim" />
+              <div className="flex items-center gap-2 font-semibold text-foreground text-sm uppercase tracking-wider">
+                <Star size={16} className="text-secondary" />
                 Skills
                 {(currentResume.content?.skills?.length > 0) && (
                   <span className="ml-1 px-1.5 py-0.5 bg-primary/20 text-primary text-[10px] font-bold rounded-full border border-primary/30">{currentResume.content.skills.length}</span>
                 )}
               </div>
-              {activeAccordion === 'skills' ? <ChevronUp size={16} className="text-textDim" /> : <ChevronDown size={16} className="text-textDim" />}
+              {activeAccordion === 'skills' ? <ChevronUp size={16} className="text-secondary" /> : <ChevronDown size={16} className="text-secondary" />}
             </div>
             <AnimatePresence>
               {activeAccordion === 'skills' && (
                 <motion.div initial="collapsed" animate="open" exit="collapsed" variants={accordionVariants} transition={{ duration: 0.2 }} className="px-4 pb-4 flex flex-col gap-4">
                   {(currentResume.content?.skills || []).map((skill, idx) => (
                     <div key={idx} className="flex gap-2">
-                      <input type="text" className="w-1/3 bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={skill.category || ''} onChange={(e) => updateListField('skills', idx, 'category', e.target.value)} placeholder="Category (e.g. Frontend)"/>
-                      <input type="text" className="flex-1 bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={skill.name || ''} onChange={(e) => updateListField('skills', idx, 'name', e.target.value)} placeholder="React, Vue, Tailwind..."/>
-                      <button className="px-2 text-textDim hover:text-red-400 transition-colors" onClick={() => removeListField('skills', idx)}>
+                      <input type="text" className="w-1/3 bg-surface border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary" value={skill.category || ''} onChange={(e) => updateListField('skills', idx, 'category', e.target.value)} placeholder="Category (e.g. Frontend)"/>
+                      <input type="text" className="flex-1 bg-surface border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary" value={skill.name || ''} onChange={(e) => updateListField('skills', idx, 'name', e.target.value)} placeholder="React, Vue, Tailwind..."/>
+                      <button className="px-2 text-secondary hover:text-red-400 transition-colors" onClick={() => removeListField('skills', idx)}>
                         <Trash2 size={14} />
                       </button>
                     </div>
                   ))}
-                  <button className="flex items-center justify-center gap-1.5 w-full py-2 bg-slate-800 hover:bg-slate-700 text-textMain text-sm rounded border border-borderDark border-dashed transition-colors mt-2" onClick={() => addListField('skills', { name: "", category: "General" })}>
+                  <button className="flex items-center justify-center gap-1.5 w-full py-2 bg-surfaceHover hover:bg-surfaceHover text-foreground text-sm rounded border border-border border-dashed transition-colors mt-2" onClick={() => addListField('skills', { name: "", category: "General" })}>
                     <Plus size={14} /> Add Skill Group
                   </button>
                 </motion.div>
@@ -393,46 +393,46 @@ export function Editor({
           </div>
 
           {/* 5. PROJECTS Accordion */}
-          <div className="bg-cardBg border border-borderDark rounded-lg overflow-hidden mb-8 shrink-0">
+          <div className="bg-surface border border-border rounded-lg overflow-hidden mb-8 shrink-0">
             <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors select-none" onClick={() => setActiveAccordion(activeAccordion === 'projects' ? '' : 'projects')}>
-              <div className="flex items-center gap-2 font-semibold text-textMain text-sm uppercase tracking-wider">
-                <Code size={16} className="text-textDim" />
+              <div className="flex items-center gap-2 font-semibold text-foreground text-sm uppercase tracking-wider">
+                <Code size={16} className="text-secondary" />
                 Projects
                 {(currentResume.content?.projects?.length > 0) && (
                   <span className="ml-1 px-1.5 py-0.5 bg-primary/20 text-primary text-[10px] font-bold rounded-full border border-primary/30">{currentResume.content.projects.length}</span>
                 )}
               </div>
-              {activeAccordion === 'projects' ? <ChevronUp size={16} className="text-textDim" /> : <ChevronDown size={16} className="text-textDim" />}
+              {activeAccordion === 'projects' ? <ChevronUp size={16} className="text-secondary" /> : <ChevronDown size={16} className="text-secondary" />}
             </div>
             <AnimatePresence>
               {activeAccordion === 'projects' && (
                 <motion.div initial="collapsed" animate="open" exit="collapsed" variants={accordionVariants} transition={{ duration: 0.2 }} className="px-4 pb-4 flex flex-col gap-6">
                   {(currentResume.content?.projects || []).map((proj, idx) => (
-                    <div key={idx} className="relative bg-slate-900/50 border border-borderDark rounded p-4 flex flex-col gap-4 group">
-                      <button className="absolute top-3 right-3 text-textDim hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => removeListField('projects', idx)}>
+                    <div key={idx} className="relative bg-surface/50 border border-border rounded p-4 flex flex-col gap-4 group">
+                      <button className="absolute top-3 right-3 text-secondary hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => removeListField('projects', idx)}>
                         <Trash2 size={14} />
                       </button>
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Project Title</label>
-                        <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={proj.title || ''} onChange={(e) => updateListField('projects', idx, 'title', e.target.value)} placeholder="ResumeForge"/>
+                        <label className="text-xs font-medium text-muted uppercase tracking-wide">Project Title</label>
+                        <input type="text" className="w-full bg-surface border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary" value={proj.title || ''} onChange={(e) => updateListField('projects', idx, 'title', e.target.value)} placeholder="ResumeForge"/>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Role</label>
-                          <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={proj.role || ''} onChange={(e) => updateListField('projects', idx, 'role', e.target.value)} placeholder="Creator"/>
+                          <label className="text-xs font-medium text-muted uppercase tracking-wide">Role</label>
+                          <input type="text" className="w-full bg-surface border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary" value={proj.role || ''} onChange={(e) => updateListField('projects', idx, 'role', e.target.value)} placeholder="Creator"/>
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Link / URL</label>
-                          <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={proj.link || ''} onChange={(e) => updateListField('projects', idx, 'link', e.target.value)} placeholder="github.com/..."/>
+                          <label className="text-xs font-medium text-muted uppercase tracking-wide">Link / URL</label>
+                          <input type="text" className="w-full bg-surface border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary" value={proj.link || ''} onChange={(e) => updateListField('projects', idx, 'link', e.target.value)} placeholder="github.com/..."/>
                         </div>
                       </div>
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Description</label>
-                        <textarea rows={2} className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={proj.description || ''} onChange={(e) => updateListField('projects', idx, 'description', e.target.value)} placeholder="• Built with React..."/>
+                        <label className="text-xs font-medium text-muted uppercase tracking-wide">Description</label>
+                        <textarea rows={2} className="w-full bg-surface border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary" value={proj.description || ''} onChange={(e) => updateListField('projects', idx, 'description', e.target.value)} placeholder="• Built with React..."/>
                       </div>
                     </div>
                   ))}
-                  <button className="flex items-center justify-center gap-1.5 w-full py-2 bg-slate-800 hover:bg-slate-700 text-textMain text-sm rounded border border-borderDark border-dashed transition-colors" onClick={() => addListField('projects', { title: "", role: "", link: "", description: "" })}>
+                  <button className="flex items-center justify-center gap-1.5 w-full py-2 bg-surfaceHover hover:bg-surfaceHover text-foreground text-sm rounded border border-border border-dashed transition-colors" onClick={() => addListField('projects', { title: "", role: "", link: "", description: "" })}>
                     <Plus size={14} /> Add Project
                   </button>
                 </motion.div>
@@ -443,15 +443,15 @@ export function Editor({
       </div>
 
       {/* RIGHT PANEL: LIVE PREVIEW */}
-      <div className={`${mobileTab === 'preview' ? 'flex' : 'hidden'} md:flex flex-col bg-slate-800 overflow-hidden relative print:block print:overflow-visible h-full`}>
-        <div className="bg-slate-900 border-b border-borderDark px-4 py-2 flex items-center justify-between z-10 shrink-0 no-print">
+      <div className={`${mobileTab === 'preview' ? 'flex' : 'hidden'} md:flex flex-col bg-surfaceHover overflow-hidden relative print:block print:overflow-visible h-full`}>
+        <div className="bg-surface border-b border-border px-4 py-2 flex items-center justify-between z-10 shrink-0 no-print">
           <div className="flex items-center gap-3">
-            <span className="text-xs font-semibold uppercase tracking-wider text-textMuted">Template:</span>
-            <div className="flex bg-slate-800 rounded p-1 border border-borderDark">
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted">Template:</span>
+            <div className="flex bg-surfaceHover rounded p-1 border border-border">
               {templates.map(tpl => (
                 <button
                   key={tpl}
-                  className={`px-3 py-1 text-xs font-medium rounded capitalize transition-colors ${currentResume.template_name === tpl ? 'bg-primary text-white shadow' : 'text-textMuted hover:text-textMain'}`}
+                  className={`px-3 py-1 text-xs font-medium rounded capitalize transition-colors ${currentResume.template_name === tpl ? 'bg-primary text-white shadow' : 'text-muted hover:text-foreground'}`}
                   onClick={() => setCurrentResume({ ...currentResume, template_name: tpl })}
                 >
                   {tpl}
@@ -460,12 +460,12 @@ export function Editor({
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-xs font-semibold uppercase tracking-wider text-textMuted">Paper:</span>
-            <div className="flex bg-slate-800 rounded p-1 border border-borderDark">
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted">Paper:</span>
+            <div className="flex bg-surfaceHover rounded p-1 border border-border">
               {paperSizes.map(size => (
                 <button
                   key={size}
-                  className={`px-3 py-1 text-xs font-medium rounded capitalize transition-colors ${paperSize === size ? 'bg-slate-600 text-white shadow' : 'text-textMuted hover:text-textMain'}`}
+                  className={`px-3 py-1 text-xs font-medium rounded capitalize transition-colors ${paperSize === size ? 'bg-slate-600 text-white shadow' : 'text-muted hover:text-foreground'}`}
                   onClick={() => setCurrentResume({ ...currentResume, paper_size: size })}
                 >
                   {size}
@@ -473,11 +473,11 @@ export function Editor({
               ))}
             </div>
           </div>
-          <div className="text-xs text-textMuted hidden md:block">
+          <div className="text-xs text-muted hidden md:block">
             Changes save automatically
           </div>
         </div>
-        <div className="flex-1 overflow-auto p-4 md:p-8 bg-slate-800 custom-scrollbar print:p-0 print:bg-transparent print:overflow-visible print:block">
+        <div className="flex-1 overflow-auto p-4 md:p-8 bg-surfaceHover custom-scrollbar print:p-0 print:bg-transparent print:overflow-visible print:block">
           <style>{`
             @media print {
               @page {

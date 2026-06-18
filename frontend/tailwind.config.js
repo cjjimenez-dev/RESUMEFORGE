@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -7,16 +8,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        bgStart: '#0f172a',
-        bgEnd: '#020617',
-        cardBg: 'rgba(30, 41, 59, 0.5)',
-        borderDark: 'rgba(255, 255, 255, 0.08)',
-        borderHover: 'rgba(255, 255, 255, 0.15)',
-        primary: '#ea580c',
-        primaryHover: '#c2410c',
-        textMain: '#f8fafc',
-        textMuted: '#94a3b8',
-        textDim: '#64748b'
+        background: 'rgb(var(--background) / <alpha-value>)',
+        foreground: 'rgb(var(--foreground) / <alpha-value>)',
+        surface: 'rgb(var(--surface) / <alpha-value>)',
+        surfaceHover: 'rgb(var(--surface-hover) / <alpha-value>)',
+        border: 'rgb(var(--border) / <alpha-value>)',
+        primary: 'rgb(var(--primary) / <alpha-value>)',
+        primaryHover: 'rgb(var(--primary-hover) / <alpha-value>)',
+        muted: 'rgb(var(--muted) / <alpha-value>)',
+        secondary: 'rgb(var(--secondary) / <alpha-value>)'
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],

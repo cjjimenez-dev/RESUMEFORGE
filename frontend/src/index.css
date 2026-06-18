@@ -3,11 +3,40 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --background: 255 255 255;      /* White */
+    --foreground: 15 23 42;         /* Slate 900 */
+    --surface: 248 250 252;         /* Slate 50 */
+    --surface-hover: 241 245 249;   /* Slate 100 */
+    --border: 226 232 240;          /* Slate 200 */
+    --primary: 249 115 22;          /* #F97316 */
+    --primary-hover: 234 88 12;     /* Orange 600 */
+    --muted: 100 116 139;           /* Slate 500 */
+    --secondary: 71 85 105;         /* Slate 600 */
+  }
+
+  .dark {
+    --background: 11 19 38;         /* #0B1326 */
+    --foreground: 248 250 252;      /* Slate 50 */
+    --surface: 51 65 85;            /* #334155 */
+    --surface-hover: 71 85 105;     /* Slate 600 */
+    --border: 51 65 85;             /* #334155 */
+    --primary: 249 115 22;          /* #F97316 */
+    --primary-hover: 234 88 12;     /* Orange 600 */
+    --muted: 188 199 222;           /* #BCC7DE */
+    --secondary: 188 199 222;       /* #BCC7DE */
+  }
+
   body {
-    @apply bg-slate-950 text-slate-100 min-h-screen font-sans m-0 antialiased;
+    @apply bg-background text-foreground min-h-screen font-sans m-0 antialiased;
+  }
+
+  .dark body {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
   }
 }
-
 @layer components {
   /* Keep resume-paper specific styling for the live preview aspect ratio */
   .resume-paper {
@@ -34,18 +63,15 @@
     @apply cursor-default pointer-events-none;
   }
 
-  /* Custom Scrollbar for dark theme */
+  /* Custom Scrollbar */
   ::-webkit-scrollbar {
     width: 6px;
   }
   ::-webkit-scrollbar-track {
-    @apply bg-slate-900;
+    @apply bg-background;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-slate-600 rounded-full;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-slate-400;
+    @apply bg-surface hover:bg-surfaceHover rounded-full;
   }
 }
 

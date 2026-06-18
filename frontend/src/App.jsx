@@ -34,6 +34,17 @@ export default function App() {
     token || localStorage.getItem('guestMode') === 'true' ? 'dashboard' : 'auth'
   );
   const [authMode, setAuthMode] = useState('login');
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+  
+  // Apply theme to document
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
   
   // Auth Form
   const [authEmail, setAuthEmail] = useState('');
@@ -476,6 +487,8 @@ export default function App() {
         screen={screen} 
         setScreen={setScreen} 
         handleLogout={handleLogout} 
+        theme={theme}
+        setTheme={setTheme}
       />
 
       <div className="flex-1 overflow-auto relative print:overflow-visible">
