@@ -458,8 +458,7 @@ export function Editor({
             Changes save automatically
           </div>
         </div>
-        
-        <div className="flex-1 overflow-auto p-4 md:p-8 flex justify-center bg-slate-800 custom-scrollbar print:p-0 print:bg-transparent print:overflow-visible print:block">
+        <div className="flex-1 overflow-auto p-4 md:p-8 bg-slate-800 custom-scrollbar print:p-0 print:bg-transparent print:overflow-visible print:block">
           <style>{`
             @media print {
               @page {
