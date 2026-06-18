@@ -5,7 +5,7 @@ import { ClassicTemplate, ModernTemplate, CreativeTemplate } from './ResumeTempl
 import ImageCropperModal from './ImageCropperModal';
 
 export function Editor({
-  currentResume, setCurrentResume, saving, handleSaveResume, handleExportDocx, handleExportPdf, loadDogfoodData,
+  currentResume, setCurrentResume, saving, handleSaveResume, handleExportDocx, handleExportPdf,
   activeAccordion, setActiveAccordion, updatePersonalInfo, handleImageUpload, updateListField, removeListField, addListField
 }) {
   const printRef = useRef(null);
@@ -87,10 +87,7 @@ export function Editor({
               <Download size={14} />
               PDF
             </button>
-            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-primary text-xs rounded border border-dashed border-primary transition-colors ml-auto" onClick={loadDogfoodData}>
-              <RefreshCw size={12} />
-              Dogfood
-            </button>
+
           </div>
         </div>
 

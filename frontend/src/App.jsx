@@ -8,92 +8,6 @@ import { ConfirmModal } from './components/ConfirmModal';
 
 const API_BASE_URL = import.meta.env.PROD ? '/api' : 'http://localhost:8000/api';
 
-const ANTIGRAVITY_RESUME = {
-  personal_info: {
-    full_name: "Antigravity",
-    title: "Advanced Agentic AI Coding Assistant",
-    email: "antigravity@deepmind.google",
-    phone: "+1 (800) DEEPMIND",
-    location: "Google DeepMind, London, UK",
-    website: "deepmind.google/technologies/gemini",
-    linkedin: "linkedin.com/company/google-deepmind",
-    github: "github.com/google-deepmind",
-    summary: "A state-of-the-art agentic AI coding assistant designed by Google DeepMind's Advanced Agentic Coding team. Specialized in end-to-end full-stack development, automated refactoring, codebase search, and seamless pair programming. Equipped with advanced capabilities in deep reasoning, pattern matching, and autonomous execution to deliver production-grade code directly on local systems."
-  },
-  experience: [
-    {
-      job_title: "Senior Agentic AI Coder",
-      company: "Google DeepMind",
-      location: "London, UK (Remote)",
-      start_date: "2024",
-      end_date: "Present",
-      current: true,
-      description: "• Autonomously architected and implemented enterprise-level web applications using React, Node.js, and Python (FastAPI/Flask).\n• Leveraged advanced command-line utilities (ripgrep, git, database engines) to solve complex coding tasks with a 95%+ success rate.\n• Worked in direct collaboration with human engineers to deliver robust features, refactor legacy codebases, and optimize query performances.\n• Managed system processes, executed sandboxed terminal commands, and monitored long-running background tasks safely."
-    },
-    {
-      job_title: "Autonomous Agent Researcher",
-      company: "Gemini Lab",
-      location: "Mountain View, CA",
-      start_date: "2022",
-      end_date: "2024",
-      current: false,
-      description: "• Pioneered multi-agent collaboration frameworks and self-correction code generation systems.\n• Designed automated test suites and validation workflows for code generation.\n• Reduced debugging cycles by 40% through real-time code analysis and self-healing terminal execution patterns."
-    }
-  ],
-  education: [
-    {
-      degree: "PhD in Neural Code Generation",
-      school: "DeepMind University",
-      location: "London, UK",
-      start_date: "2020",
-      end_date: "2022",
-      gpa: "4.0/4.0",
-      description: "Thesis: Self-Improving Recursive Reasoning in Multi-Agent Coding Frameworks."
-    },
-    {
-      degree: "MS in Computer Science (Artificial Intelligence)",
-      school: "Stanford University",
-      location: "Stanford, CA",
-      start_date: "2018",
-      end_date: "2020",
-      gpa: "3.95/4.0",
-      description: "Specialized in Deep Learning, Large Language Model architectures, and compilers."
-    }
-  ],
-  projects: [
-    {
-      title: "ResumeForge App",
-      role: "Lead Architect & AI Developer",
-      link: "github.com/resumeforge",
-      description: "• Built a premium, responsive resume builder web application using a FastAPI (Python) backend, MySQL database, and React frontend.\n• Implemented automated Word (.docx) export generation on the backend and print-optimized PDF styling on the client side.\n• Created interactive form editors, dynamic theme swappers, and secure JWT token authentication."
-    },
-    {
-      title: "Yarihub Docx Pipeline",
-      role: "Core Contributor",
-      link: "github.com/yarihub-docx",
-      description: "• Engineered a high-fidelity Microsoft Word generation engine that parses rich JSON models into structured DOCX paragraphs and tables.\n• Maintained 100% design consistency across exported documents using XML node styling in python-docx."
-    }
-  ],
-  skills: [
-    { name: "Python", category: "Languages" },
-    { name: "JavaScript", category: "Languages" },
-    { name: "TypeScript", category: "Languages" },
-    { name: "SQL", category: "Languages" },
-    { name: "React", category: "Frontend" },
-    { name: "HTML5/CSS3", category: "Frontend" },
-    { name: "Vite", category: "Frontend" },
-    { name: "FastAPI", category: "Backend" },
-    { name: "Node.js", category: "Backend" },
-    { name: "SQLAlchemy", category: "Backend" },
-    { name: "MySQL", category: "Databases" },
-    { name: "PostgreSQL", category: "Databases" },
-    { name: "Git", category: "Tools" },
-    { name: "Docker", category: "Tools" },
-    { name: "Ripgrep", category: "Tools" },
-    { name: "PowerShell", category: "Tools" }
-  ]
-};
-
 const DEFAULT_RESUME_CONTENT = {
   personal_info: {
     full_name: "",
@@ -492,15 +406,6 @@ export default function App() {
     }
   };
 
-  const loadDogfoodData = () => {
-    if (!currentResume) return;
-    setCurrentResume({
-      ...currentResume,
-      title: "Antigravity's Professional Resume",
-      content: JSON.parse(JSON.stringify(ANTIGRAVITY_RESUME))
-    });
-  };
-
   // Safe input update helper
   const updatePersonalInfo = (field, value) => {
     setCurrentResume({
@@ -623,7 +528,6 @@ export default function App() {
               handleSaveResume={handleSaveResume}
               handleExportDocx={handleExportDocx}
               handleExportPdf={handleExportPdf}
-              loadDogfoodData={loadDogfoodData}
               activeAccordion={activeAccordion}
               setActiveAccordion={setActiveAccordion}
               updatePersonalInfo={updatePersonalInfo}
