@@ -493,6 +493,7 @@ export function Editor({
           </div>
         </div>
       </div>
+      </div>
 
       <ImageCropperModal
         isOpen={cropperOpen}
