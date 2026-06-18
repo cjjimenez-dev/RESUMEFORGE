@@ -44,6 +44,8 @@ export function Editor({
 
   const [cropperOpen, setCropperOpen] = useState(false);
   const [cropperSrc, setCropperSrc] = useState(null);
+  const [mobileTab, setMobileTab] = useState('edit');
+
 
   const handleLocalImageUpload = (e) => {
     const file = e.target.files[0];
@@ -63,9 +65,26 @@ export function Editor({
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] lg:grid-cols-[480px_1fr] h-[calc(100vh-65px)] overflow-hidden print:block print:h-auto print:overflow-visible">
-      {/* LEFT PANEL: FORM EDITOR */}
-      <div className="flex flex-col bg-slate-950 border-r border-borderDark overflow-hidden no-print" style={{height: 'calc(100vh - 65px)'}}>
+    <div className="flex flex-col h-[calc(100vh-65px)] overflow-hidden print:block print:h-auto print:overflow-visible">
+      {/* MOBILE TABS */}
+      <div className="flex md:hidden bg-slate-900 border-b border-borderDark shrink-0 no-print">
+        <button 
+          className={`flex-1 py-3 text-sm font-medium transition-colors ${mobileTab === 'edit' ? 'text-primary border-b-2 border-primary bg-primary/5' : 'text-textMuted hover:text-textMain'}`} 
+          onClick={() => setMobileTab('edit')}
+        >
+          Edit Info
+        </button>
+        <button 
+          className={`flex-1 py-3 text-sm font-medium transition-colors ${mobileTab === 'preview' ? 'text-primary border-b-2 border-primary bg-primary/5' : 'text-textMuted hover:text-textMain'}`} 
+          onClick={() => setMobileTab('preview')}
+        >
+          Live Preview
+        </button>
+      </div>
+
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-[1fr_1fr] lg:grid-cols-[480px_1fr] overflow-hidden">
+        {/* LEFT PANEL: FORM EDITOR */}
+        <div className={`${mobileTab === 'edit' ? 'flex' : 'hidden'} md:flex flex-col bg-slate-950 border-r border-borderDark overflow-hidden no-print h-full`}>
         <div className="p-4 border-b border-borderDark bg-slate-900 flex flex-col gap-3 shrink-0">
           <input 
             type="text" 
@@ -424,7 +443,7 @@ export function Editor({
       </div>
 
       {/* RIGHT PANEL: LIVE PREVIEW */}
-      <div className="flex flex-col bg-slate-800 overflow-hidden relative print:block print:overflow-visible">
+      <div className={`${mobileTab === 'preview' ? 'flex' : 'hidden'} md:flex flex-col bg-slate-800 overflow-hidden relative print:block print:overflow-visible h-full`}>
         <div className="bg-slate-900 border-b border-borderDark px-4 py-2 flex items-center justify-between z-10 shrink-0 no-print">
           <div className="flex items-center gap-3">
             <span className="text-xs font-semibold uppercase tracking-wider text-textMuted">Template:</span>
