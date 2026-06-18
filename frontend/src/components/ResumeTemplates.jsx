@@ -59,46 +59,46 @@ export function ClassicTemplate({ content }) {
         </div>
       )}
 
-      {experience.length > 0 && (
-        <div className="mb-6">
-          <h2 className="text-lg font-bold uppercase border-b border-slate-300 text-slate-800 mb-2 pb-1 tracking-wider">Experience</h2>
-          {experience.map((exp, idx) => (
-            <div key={idx} className="mb-4">
-              <div className="flex justify-between font-bold text-slate-900 text-[15px]">
-                <span>{exp.job_title}</span>
-                <span className="font-normal text-sm">{exp.start_date} – {exp.current ? 'Present' : exp.end_date}</span>
-              </div>
-              <div className="flex justify-between text-slate-700 italic text-sm mb-1">
-                <span>{exp.company}</span>
-                <span>{exp.location}</span>
-              </div>
-              {exp.description && (
-                <div className="text-sm text-slate-800 whitespace-pre-wrap pl-4 border-l-2 border-slate-200 mt-1">
-                  {exp.description}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
-
       {education.length > 0 && (
         <div className="mb-6">
           <h2 className="text-lg font-bold uppercase border-b border-slate-300 text-slate-800 mb-2 pb-1 tracking-wider">Education</h2>
           {education.map((edu, idx) => (
             <div key={idx} className="mb-3">
-              <div className="flex justify-between font-bold text-slate-900 text-[15px]">
-                <span>{edu.degree}</span>
-                <span className="font-normal text-sm">{edu.start_date} – {edu.end_date}</span>
+              <div className="flex justify-between gap-3 font-bold text-slate-900 text-[15px]">
+                <span className="min-w-0 break-words">{edu.degree}</span>
+                <span className="font-normal text-sm shrink-0 text-right">{edu.start_date} – {edu.end_date}</span>
               </div>
-              <div className="flex justify-between text-slate-700 italic text-sm mb-1">
-                <span>{edu.school}</span>
-                <span>{edu.location}</span>
+              <div className="flex justify-between gap-3 text-slate-700 italic text-sm mb-1">
+                <span className="min-w-0 break-words">{edu.school}</span>
+                <span className="shrink-0 text-right">{edu.location}</span>
               </div>
-              <div className="text-sm text-slate-600">
+              <div className="text-sm text-slate-600 break-words" style={{overflowWrap:'break-word', whiteSpace:'pre-wrap'}}>
                 {edu.gpa && <span className="font-semibold text-slate-700">GPA: {edu.gpa} </span>}
                 {edu.description && <span> • {edu.description}</span>}
               </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {experience.length > 0 && (
+        <div className="mb-6">
+          <h2 className="text-lg font-bold uppercase border-b border-slate-300 text-slate-800 mb-2 pb-1 tracking-wider">Experience</h2>
+          {experience.map((exp, idx) => (
+            <div key={idx} className="mb-4">
+              <div className="flex justify-between gap-3 font-bold text-slate-900 text-[15px]">
+                <span className="min-w-0 break-words">{exp.job_title}</span>
+                <span className="font-normal text-sm shrink-0 text-right">{exp.start_date} – {exp.current ? 'Present' : exp.end_date}</span>
+              </div>
+              <div className="flex justify-between gap-3 text-slate-700 italic text-sm mb-1">
+                <span className="min-w-0 break-words">{exp.company}</span>
+                <span className="shrink-0 text-right">{exp.location}</span>
+              </div>
+              {exp.description && (
+                <div className="text-sm text-slate-800 break-words pl-4 border-l-2 border-slate-200 mt-2" style={{overflowWrap:'break-word', wordBreak:'break-word', whiteSpace:'pre-wrap'}}>
+                  {exp.description}
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -109,12 +109,12 @@ export function ClassicTemplate({ content }) {
           <h2 className="text-lg font-bold uppercase border-b border-slate-300 text-slate-800 mb-2 pb-1 tracking-wider">Projects</h2>
           {projects.map((proj, idx) => (
             <div key={idx} className="mb-3">
-              <div className="flex justify-between font-bold text-slate-900 text-[15px]">
-                <span>{proj.title} {proj.role && <span className="font-normal text-slate-500 italic">({proj.role})</span>}</span>
-                {proj.link && <span className="font-normal text-sm text-slate-500">{proj.link}</span>}
+              <div className="flex justify-between gap-3 font-bold text-slate-900 text-[15px]">
+                <span className="min-w-0 break-words">{proj.title} {proj.role && <span className="font-normal text-slate-500 italic">({proj.role})</span>}</span>
+                {proj.link && <span className="font-normal text-sm text-slate-500 shrink-0 break-all">{proj.link}</span>}
               </div>
               {proj.description && (
-                <div className="text-sm text-slate-800 whitespace-pre-wrap pl-4 border-l-2 border-slate-200 mt-1">
+                <div className="text-sm text-slate-800 break-words pl-4 border-l-2 border-slate-200 mt-2" style={{overflowWrap:'break-word', wordBreak:'break-word', whiteSpace:'pre-wrap'}}>
                   {proj.description}
                 </div>
               )}
@@ -236,49 +236,49 @@ export function ModernTemplate({ content }) {
           </div>
         )}
 
-        {experience.length > 0 && (
-          <div>
-            <h2 className="text-xl font-bold text-slate-900 border-b-2 border-slate-200 pb-2 mb-4 tracking-wide">Work Experience</h2>
-            <div className="flex flex-col gap-6">
-              {experience.map((exp, idx) => (
-                <div key={idx}>
-                  <div className="flex justify-between items-baseline mb-1">
-                    <div className="text-[17px] font-bold text-slate-900">{exp.job_title}</div>
-                    <div className="text-sm font-medium text-orange-600">{exp.start_date} – {exp.current ? 'Present' : exp.end_date}</div>
-                  </div>
-                  <div className="flex justify-between text-[15px] text-slate-600 font-medium mb-2">
-                    <div>{exp.company}</div>
-                    <div>{exp.location}</div>
-                  </div>
-                  {exp.description && (
-                    <div className="text-[14px] leading-relaxed whitespace-pre-wrap pl-4 border-l-2 border-orange-200 text-slate-700">
-                      {exp.description}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
         {education.length > 0 && (
           <div>
             <h2 className="text-xl font-bold text-slate-900 border-b-2 border-slate-200 pb-2 mb-4 tracking-wide">Education</h2>
             <div className="flex flex-col gap-5">
               {education.map((edu, idx) => (
                 <div key={idx}>
-                  <div className="flex justify-between items-baseline mb-1">
-                    <div className="text-[17px] font-bold text-slate-900">{edu.degree}</div>
-                    <div className="text-sm font-medium text-orange-600">{edu.start_date} – {edu.end_date}</div>
+                  <div className="flex justify-between gap-3 items-baseline mb-1">
+                    <div className="text-[17px] font-bold text-slate-900 min-w-0 break-words">{edu.degree}</div>
+                    <div className="text-sm font-medium text-orange-600 shrink-0 text-right">{edu.start_date} – {edu.end_date}</div>
                   </div>
-                  <div className="flex justify-between text-[15px] text-slate-600 font-medium mb-1">
-                    <div>{edu.school}</div>
-                    <div>{edu.location}</div>
+                  <div className="flex justify-between gap-3 text-[15px] text-slate-600 font-medium mb-1">
+                    <div className="min-w-0 break-words">{edu.school}</div>
+                    <div className="shrink-0 text-right">{edu.location}</div>
                   </div>
-                  <div className="text-[14px] text-slate-500">
+                  <div className="text-[14px] text-slate-500 break-words" style={{overflowWrap:'break-word', whiteSpace:'pre-wrap'}}>
                     {edu.gpa && <span className="font-semibold text-slate-700">GPA: {edu.gpa} • </span>}
                     {edu.description}
                   </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {experience.length > 0 && (
+          <div>
+            <h2 className="text-xl font-bold text-slate-900 border-b-2 border-slate-200 pb-2 mb-4 tracking-wide">Work Experience</h2>
+            <div className="flex flex-col gap-6">
+              {experience.map((exp, idx) => (
+                <div key={idx}>
+                  <div className="flex justify-between gap-3 items-baseline mb-1">
+                    <div className="text-[17px] font-bold text-slate-900 min-w-0 break-words">{exp.job_title}</div>
+                    <div className="text-sm font-medium text-orange-600 shrink-0 text-right">{exp.start_date} – {exp.current ? 'Present' : exp.end_date}</div>
+                  </div>
+                  <div className="flex justify-between gap-3 text-[15px] text-slate-600 font-medium mb-2">
+                    <div className="min-w-0 break-words">{exp.company}</div>
+                    <div className="shrink-0 text-right">{exp.location}</div>
+                  </div>
+                  {exp.description && (
+                    <div className="text-[14px] leading-relaxed break-words pl-4 border-l-2 border-orange-200 text-slate-700 mt-2" style={{overflowWrap:'break-word', wordBreak:'break-word', whiteSpace:'pre-wrap'}}>
+                      {exp.description}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -291,12 +291,12 @@ export function ModernTemplate({ content }) {
             <div className="flex flex-col gap-5">
               {projects.map((proj, idx) => (
                 <div key={idx}>
-                  <div className="flex justify-between items-baseline mb-1">
-                    <div className="text-[17px] font-bold text-slate-900">{proj.title} {proj.role && <span className="text-slate-500 font-normal text-[15px]">({proj.role})</span>}</div>
-                    {proj.link && <div className="text-sm text-orange-600 break-all">{proj.link}</div>}
+                  <div className="flex justify-between gap-3 items-baseline mb-1">
+                    <div className="text-[17px] font-bold text-slate-900 min-w-0 break-words">{proj.title} {proj.role && <span className="text-slate-500 font-normal text-[15px]">({proj.role})</span>}</div>
+                    {proj.link && <div className="text-sm text-orange-600 shrink-0 break-all">{proj.link}</div>}
                   </div>
                   {proj.description && (
-                    <div className="text-[14px] leading-relaxed whitespace-pre-wrap pl-4 border-l-2 border-orange-200 text-slate-700 mt-2">
+                    <div className="text-[14px] leading-relaxed break-words pl-4 border-l-2 border-orange-200 text-slate-700 mt-2" style={{overflowWrap:'break-word', wordBreak:'break-word', whiteSpace:'pre-wrap'}}>
                       {proj.description}
                     </div>
                   )}
@@ -366,24 +366,23 @@ export function CreativeTemplate({ content }) {
         </div>
       )}
 
-      {experience.length > 0 && (
+      {education.length > 0 && (
         <div className="mb-10">
-          <h2 className="text-sm font-bold uppercase tracking-widest text-teal-600 mb-6 border-b-2 border-slate-100 pb-2">02. Work History</h2>
-          <div className="flex flex-col gap-8">
-            {experience.map((exp, idx) => (
-              <div key={idx} className="grid grid-cols-[180px_1fr] gap-6">
-                <div className="text-sm font-medium text-slate-900">
-                  {exp.start_date} – {exp.current ? 'Present' : exp.end_date}
-                  <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider">{exp.location}</div>
+          <h2 className="text-sm font-bold uppercase tracking-widest text-teal-600 mb-6 border-b-2 border-slate-100 pb-2">02. Education</h2>
+          <div className="flex flex-col gap-6">
+            {education.map((edu, idx) => (
+              <div key={idx} className="grid gap-6" style={{gridTemplateColumns:'minmax(0,140px) minmax(0,1fr)'}}>
+                <div className="text-sm font-medium text-slate-900 break-words">
+                  {edu.start_date} – {edu.end_date}
+                  <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider break-words">{edu.location}</div>
                 </div>
-                <div>
-                  <div className="text-lg font-bold text-slate-900 leading-tight">{exp.job_title}</div>
-                  <div className="text-[15px] text-teal-600 font-medium mb-3">{exp.company}</div>
-                  {exp.description && (
-                    <div className="text-[14px] leading-relaxed whitespace-pre-wrap text-slate-600 font-light">
-                      {exp.description}
-                    </div>
-                  )}
+                <div className="min-w-0">
+                  <div className="text-lg font-bold text-slate-900 leading-tight break-words">{edu.degree}</div>
+                  <div className="text-[15px] text-teal-600 font-medium mb-2 break-words">{edu.school}</div>
+                  <div className="text-[14px] text-slate-500 font-light break-words" style={{overflowWrap:'break-word', whiteSpace:'pre-wrap'}}>
+                    {edu.gpa && <span className="font-semibold text-slate-700">GPA: {edu.gpa} • </span>}
+                    {edu.description}
+                  </div>
                 </div>
               </div>
             ))}
@@ -391,23 +390,24 @@ export function CreativeTemplate({ content }) {
         </div>
       )}
 
-      {education.length > 0 && (
+      {experience.length > 0 && (
         <div className="mb-10">
-          <h2 className="text-sm font-bold uppercase tracking-widest text-teal-600 mb-6 border-b-2 border-slate-100 pb-2">03. Education</h2>
-          <div className="flex flex-col gap-6">
-            {education.map((edu, idx) => (
-              <div key={idx} className="grid grid-cols-[180px_1fr] gap-6">
-                <div className="text-sm font-medium text-slate-900">
-                  {edu.start_date} – {edu.end_date}
-                  <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider">{edu.location}</div>
+          <h2 className="text-sm font-bold uppercase tracking-widest text-teal-600 mb-6 border-b-2 border-slate-100 pb-2">03. Work History</h2>
+          <div className="flex flex-col gap-8">
+            {experience.map((exp, idx) => (
+              <div key={idx} className="grid gap-6" style={{gridTemplateColumns:'minmax(0,140px) minmax(0,1fr)'}}>
+                <div className="text-sm font-medium text-slate-900 break-words">
+                  {exp.start_date} – {exp.current ? 'Present' : exp.end_date}
+                  <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider break-words">{exp.location}</div>
                 </div>
-                <div>
-                  <div className="text-lg font-bold text-slate-900 leading-tight">{edu.degree}</div>
-                  <div className="text-[15px] text-teal-600 font-medium mb-2">{edu.school}</div>
-                  <div className="text-[14px] text-slate-500 font-light">
-                    {edu.gpa && <span className="font-semibold text-slate-700">GPA: {edu.gpa} • </span>}
-                    {edu.description}
-                  </div>
+                <div className="min-w-0">
+                  <div className="text-lg font-bold text-slate-900 leading-tight break-words">{exp.job_title}</div>
+                  <div className="text-[15px] text-teal-600 font-medium mb-3 break-words">{exp.company}</div>
+                  {exp.description && (
+                    <div className="text-[14px] leading-relaxed break-words text-slate-600 font-light" style={{overflowWrap:'break-word', wordBreak:'break-word', whiteSpace:'pre-wrap'}}>
+                      {exp.description}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -420,15 +420,15 @@ export function CreativeTemplate({ content }) {
           <h2 className="text-sm font-bold uppercase tracking-widest text-teal-600 mb-6 border-b-2 border-slate-100 pb-2">04. Selected Works</h2>
           <div className="flex flex-col gap-8">
             {projects.map((proj, idx) => (
-              <div key={idx} className="grid grid-cols-[180px_1fr] gap-6">
-                <div className="text-sm font-medium text-slate-900">
+              <div key={idx} className="grid gap-6" style={{gridTemplateColumns:'minmax(0,140px) minmax(0,1fr)'}}>
+                <div className="text-sm font-medium text-slate-900 break-words">
                   {proj.role || 'Project'}
                   {proj.link && <div className="text-xs text-slate-400 mt-1 break-all uppercase tracking-wider">{proj.link}</div>}
                 </div>
-                <div>
-                  <div className="text-lg font-bold text-slate-900 leading-tight mb-3">{proj.title}</div>
+                <div className="min-w-0">
+                  <div className="text-lg font-bold text-slate-900 leading-tight mb-3 break-words">{proj.title}</div>
                   {proj.description && (
-                    <div className="text-[14px] leading-relaxed whitespace-pre-wrap text-slate-600 font-light">
+                    <div className="text-[14px] leading-relaxed break-words text-slate-600 font-light" style={{overflowWrap:'break-word', wordBreak:'break-word', whiteSpace:'pre-wrap'}}>
                       {proj.description}
                     </div>
                   )}

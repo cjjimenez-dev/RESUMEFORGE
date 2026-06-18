@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Save, Download, RefreshCw, User, Briefcase, GraduationCap, Code, Star, ChevronDown, ChevronUp, Trash2, Plus, Minus } from 'lucide-react';
 import { ClassicTemplate, ModernTemplate, CreativeTemplate } from './ResumeTemplates';
@@ -9,6 +9,29 @@ export function Editor({
   activeAccordion, setActiveAccordion, updatePersonalInfo, handleImageUpload, updateListField, removeListField, addListField
 }) {
   const printRef = useRef(null);
+
+  // Auto-open the section that has the most imported content
+  useEffect(() => {
+    const c = currentResume?.content || {};
+    const info = c.personal_info || {};
+    const hasPersonal = !!(info.full_name || info.email || info.phone);
+    const expCount = (c.experience || []).length;
+    const eduCount = (c.education || []).length;
+    const skillCount = (c.skills || []).length;
+    const projCount = (c.projects || []).length;
+
+    // Pick the section with the most content to auto-open
+    const scores = [
+      { key: 'personal',   score: hasPersonal ? 1 : 0 },
+      { key: 'experience', score: expCount },
+      { key: 'education',  score: eduCount },
+      { key: 'skills',     score: skillCount },
+      { key: 'projects',   score: projCount },
+    ];
+    const best = scores.reduce((a, b) => b.score > a.score ? b : a, { key: 'personal', score: 0 });
+    if (best.score > 0) setActiveAccordion(best.key);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentResume?.id]);
 
   const accordionVariants = {
     open: { opacity: 1, height: 'auto', marginTop: 12 },
@@ -42,7 +65,7 @@ export function Editor({
   return (
     <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] lg:grid-cols-[480px_1fr] h-[calc(100vh-65px)] overflow-hidden print:block print:h-auto print:overflow-visible">
       {/* LEFT PANEL: FORM EDITOR */}
-      <div className="flex flex-col bg-slate-950 border-r border-borderDark overflow-hidden no-print">
+      <div className="flex flex-col bg-slate-950 border-r border-borderDark overflow-hidden no-print" style={{height: 'calc(100vh - 65px)'}}>
         <div className="p-4 border-b border-borderDark bg-slate-900 flex flex-col gap-3 shrink-0">
           <input 
             type="text" 
@@ -71,9 +94,9 @@ export function Editor({
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3 custom-scrollbar">
+        <div className="flex-1 min-h-0 overflow-y-auto p-4 flex flex-col gap-3 custom-scrollbar">
           {/* 1. PERSONAL INFO Accordion */}
-          <div className="bg-cardBg border border-borderDark rounded-lg overflow-hidden">
+          <div className="bg-cardBg border border-borderDark rounded-lg overflow-hidden shrink-0">
             <div 
               className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors select-none"
               onClick={() => setActiveAccordion(activeAccordion === 'personal' ? '' : 'personal')}
@@ -81,6 +104,9 @@ export function Editor({
               <div className="flex items-center gap-2 font-semibold text-textMain text-sm uppercase tracking-wider">
                 <User size={16} className="text-textDim" />
                 Personal Information
+                {(currentResume.content?.personal_info?.full_name || currentResume.content?.personal_info?.email) && (
+                  <span className="ml-1 px-1.5 py-0.5 bg-primary/20 text-primary text-[10px] font-bold rounded-full border border-primary/30">✓</span>
+                )}
               </div>
               {activeAccordion === 'personal' ? <ChevronUp size={16} className="text-textDim" /> : <ChevronDown size={16} className="text-textDim" />}
             </div>
@@ -88,7 +114,7 @@ export function Editor({
               {activeAccordion === 'personal' && (
                 <motion.div 
                   initial="collapsed" animate="open" exit="collapsed" variants={accordionVariants} transition={{ duration: 0.2 }}
-                  className="px-4 pb-4 flex flex-col gap-4 overflow-hidden"
+                  className="px-4 pb-4 flex flex-col gap-4"
                 >
                   <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Profile Image (Optional)</label>
@@ -191,80 +217,21 @@ export function Editor({
             </AnimatePresence>
           </div>
 
-          {/* 2. EXPERIENCE Accordion */}
-          <div className="bg-cardBg border border-borderDark rounded-lg overflow-hidden">
-            <div 
-              className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors select-none"
-              onClick={() => setActiveAccordion(activeAccordion === 'experience' ? '' : 'experience')}
-            >
-              <div className="flex items-center gap-2 font-semibold text-textMain text-sm uppercase tracking-wider">
-                <Briefcase size={16} className="text-textDim" />
-                Work Experience
-              </div>
-              {activeAccordion === 'experience' ? <ChevronUp size={16} className="text-textDim" /> : <ChevronDown size={16} className="text-textDim" />}
-            </div>
-            <AnimatePresence>
-              {activeAccordion === 'experience' && (
-                <motion.div initial="collapsed" animate="open" exit="collapsed" variants={accordionVariants} transition={{ duration: 0.2 }} className="px-4 pb-4 flex flex-col gap-6 overflow-hidden">
-                  {(currentResume.content?.experience || []).map((exp, idx) => (
-                    <div key={idx} className="relative bg-slate-900/50 border border-borderDark rounded p-4 flex flex-col gap-4 group">
-                      <button className="absolute top-3 right-3 text-textDim hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => removeListField('experience', idx)}>
-                        <Trash2 size={14} />
-                      </button>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Job Title</label>
-                        <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={exp.job_title || ''} onChange={(e) => updateListField('experience', idx, 'job_title', e.target.value)} placeholder="Senior Software Engineer"/>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="flex flex-col gap-1.5">
-                          <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Company</label>
-                          <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={exp.company || ''} onChange={(e) => updateListField('experience', idx, 'company', e.target.value)} placeholder="Acme Corp"/>
-                        </div>
-                        <div className="flex flex-col gap-1.5">
-                          <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Location</label>
-                          <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={exp.location || ''} onChange={(e) => updateListField('experience', idx, 'location', e.target.value)} placeholder="New York, NY"/>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="flex flex-col gap-1.5">
-                          <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Start Date</label>
-                          <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={exp.start_date || ''} onChange={(e) => updateListField('experience', idx, 'start_date', e.target.value)} placeholder="Jun 2021"/>
-                        </div>
-                        <div className="flex flex-col gap-1.5">
-                          <label className="text-xs font-medium text-textMuted uppercase tracking-wide">End Date</label>
-                          <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary disabled:opacity-50" value={exp.end_date || ''} onChange={(e) => updateListField('experience', idx, 'end_date', e.target.value)} placeholder="Present" disabled={exp.current}/>
-                        </div>
-                      </div>
-                      <label className="flex items-center gap-2 text-sm text-textMuted cursor-pointer w-fit mt-[-0.5rem]">
-                        <input type="checkbox" className="rounded bg-slate-900 border-borderDark text-primary focus:ring-primary" checked={exp.current || false} onChange={(e) => updateListField('experience', idx, 'current', e.target.checked)}/>
-                        I currently work here
-                      </label>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Role Description</label>
-                        <textarea rows={3} className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={exp.description || ''} onChange={(e) => updateListField('experience', idx, 'description', e.target.value)} placeholder="• Bullet points of accomplishments..."/>
-                      </div>
-                    </div>
-                  ))}
-                  <button className="flex items-center justify-center gap-1.5 w-full py-2 bg-slate-800 hover:bg-slate-700 text-textMain text-sm rounded border border-borderDark border-dashed transition-colors" onClick={() => addListField('experience', { job_title: "", company: "", location: "", start_date: "", end_date: "", current: false, description: "" })}>
-                    <Plus size={14} /> Add Experience
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* 3. EDUCATION Accordion */}
-          <div className="bg-cardBg border border-borderDark rounded-lg overflow-hidden">
+          {/* 2. EDUCATION Accordion */}
+          <div className="bg-cardBg border border-borderDark rounded-lg overflow-hidden shrink-0">
             <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors select-none" onClick={() => setActiveAccordion(activeAccordion === 'education' ? '' : 'education')}>
               <div className="flex items-center gap-2 font-semibold text-textMain text-sm uppercase tracking-wider">
                 <GraduationCap size={16} className="text-textDim" />
                 Education
+                {(currentResume.content?.education?.length > 0) && (
+                  <span className="ml-1 px-1.5 py-0.5 bg-primary/20 text-primary text-[10px] font-bold rounded-full border border-primary/30">{currentResume.content.education.length}</span>
+                )}
               </div>
               {activeAccordion === 'education' ? <ChevronUp size={16} className="text-textDim" /> : <ChevronDown size={16} className="text-textDim" />}
             </div>
             <AnimatePresence>
               {activeAccordion === 'education' && (
-                <motion.div initial="collapsed" animate="open" exit="collapsed" variants={accordionVariants} transition={{ duration: 0.2 }} className="px-4 pb-4 flex flex-col gap-6 overflow-hidden">
+                <motion.div initial="collapsed" animate="open" exit="collapsed" variants={accordionVariants} transition={{ duration: 0.2 }} className="px-4 pb-4 flex flex-col gap-6">
                   {(currentResume.content?.education || []).map((edu, idx) => (
                     <div key={idx} className="relative bg-slate-900/50 border border-borderDark rounded p-4 flex flex-col gap-4 group">
                       <button className="absolute top-3 right-3 text-textDim hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => removeListField('education', idx)}>
@@ -312,18 +279,86 @@ export function Editor({
             </AnimatePresence>
           </div>
 
+          {/* 3. EXPERIENCE Accordion */}
+          <div className="bg-cardBg border border-borderDark rounded-lg overflow-hidden shrink-0">
+            <div 
+              className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors select-none"
+              onClick={() => setActiveAccordion(activeAccordion === 'experience' ? '' : 'experience')}
+            >
+              <div className="flex items-center gap-2 font-semibold text-textMain text-sm uppercase tracking-wider">
+                <Briefcase size={16} className="text-textDim" />
+                Work Experience
+                {(currentResume.content?.experience?.length > 0) && (
+                  <span className="ml-1 px-1.5 py-0.5 bg-primary/20 text-primary text-[10px] font-bold rounded-full border border-primary/30">{currentResume.content.experience.length}</span>
+                )}
+              </div>
+              {activeAccordion === 'experience' ? <ChevronUp size={16} className="text-textDim" /> : <ChevronDown size={16} className="text-textDim" />}
+            </div>
+            <AnimatePresence>
+              {activeAccordion === 'experience' && (
+                <motion.div initial="collapsed" animate="open" exit="collapsed" variants={accordionVariants} transition={{ duration: 0.2 }} className="px-4 pb-4 flex flex-col gap-6">
+                  {(currentResume.content?.experience || []).map((exp, idx) => (
+                    <div key={idx} className="relative bg-slate-900/50 border border-borderDark rounded p-4 flex flex-col gap-4 group">
+                      <button className="absolute top-3 right-3 text-textDim hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => removeListField('experience', idx)}>
+                        <Trash2 size={14} />
+                      </button>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Job Title</label>
+                        <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={exp.job_title || ''} onChange={(e) => updateListField('experience', idx, 'job_title', e.target.value)} placeholder="Senior Software Engineer"/>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Company</label>
+                          <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={exp.company || ''} onChange={(e) => updateListField('experience', idx, 'company', e.target.value)} placeholder="Acme Corp"/>
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Location</label>
+                          <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={exp.location || ''} onChange={(e) => updateListField('experience', idx, 'location', e.target.value)} placeholder="New York, NY"/>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Start Date</label>
+                          <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={exp.start_date || ''} onChange={(e) => updateListField('experience', idx, 'start_date', e.target.value)} placeholder="Jun 2021"/>
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-xs font-medium text-textMuted uppercase tracking-wide">End Date</label>
+                          <input type="text" className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary disabled:opacity-50" value={exp.end_date || ''} onChange={(e) => updateListField('experience', idx, 'end_date', e.target.value)} placeholder="Present" disabled={exp.current}/>
+                        </div>
+                      </div>
+                      <label className="flex items-center gap-2 text-sm text-textMuted cursor-pointer w-fit mt-[-0.5rem]">
+                        <input type="checkbox" className="rounded bg-slate-900 border-borderDark text-primary focus:ring-primary" checked={exp.current || false} onChange={(e) => updateListField('experience', idx, 'current', e.target.checked)}/>
+                        I currently work here
+                      </label>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-medium text-textMuted uppercase tracking-wide">Role Description</label>
+                        <textarea rows={3} className="w-full bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={exp.description || ''} onChange={(e) => updateListField('experience', idx, 'description', e.target.value)} placeholder="• Bullet points of accomplishments..."/>
+                      </div>
+                    </div>
+                  ))}
+                  <button className="flex items-center justify-center gap-1.5 w-full py-2 bg-slate-800 hover:bg-slate-700 text-textMain text-sm rounded border border-borderDark border-dashed transition-colors" onClick={() => addListField('experience', { job_title: "", company: "", location: "", start_date: "", end_date: "", current: false, description: "" })}>
+                    <Plus size={14} /> Add Experience
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
           {/* 4. SKILLS Accordion */}
-          <div className="bg-cardBg border border-borderDark rounded-lg overflow-hidden">
+          <div className="bg-cardBg border border-borderDark rounded-lg overflow-hidden shrink-0">
             <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors select-none" onClick={() => setActiveAccordion(activeAccordion === 'skills' ? '' : 'skills')}>
               <div className="flex items-center gap-2 font-semibold text-textMain text-sm uppercase tracking-wider">
                 <Star size={16} className="text-textDim" />
                 Skills
+                {(currentResume.content?.skills?.length > 0) && (
+                  <span className="ml-1 px-1.5 py-0.5 bg-primary/20 text-primary text-[10px] font-bold rounded-full border border-primary/30">{currentResume.content.skills.length}</span>
+                )}
               </div>
               {activeAccordion === 'skills' ? <ChevronUp size={16} className="text-textDim" /> : <ChevronDown size={16} className="text-textDim" />}
             </div>
             <AnimatePresence>
               {activeAccordion === 'skills' && (
-                <motion.div initial="collapsed" animate="open" exit="collapsed" variants={accordionVariants} transition={{ duration: 0.2 }} className="px-4 pb-4 flex flex-col gap-4 overflow-hidden">
+                <motion.div initial="collapsed" animate="open" exit="collapsed" variants={accordionVariants} transition={{ duration: 0.2 }} className="px-4 pb-4 flex flex-col gap-4">
                   {(currentResume.content?.skills || []).map((skill, idx) => (
                     <div key={idx} className="flex gap-2">
                       <input type="text" className="w-1/3 bg-slate-900 border border-borderDark rounded px-3 py-1.5 text-sm text-textMain focus:outline-none focus:border-primary" value={skill.category || ''} onChange={(e) => updateListField('skills', idx, 'category', e.target.value)} placeholder="Category (e.g. Frontend)"/>
@@ -342,17 +377,20 @@ export function Editor({
           </div>
 
           {/* 5. PROJECTS Accordion */}
-          <div className="bg-cardBg border border-borderDark rounded-lg overflow-hidden mb-8">
+          <div className="bg-cardBg border border-borderDark rounded-lg overflow-hidden mb-8 shrink-0">
             <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors select-none" onClick={() => setActiveAccordion(activeAccordion === 'projects' ? '' : 'projects')}>
               <div className="flex items-center gap-2 font-semibold text-textMain text-sm uppercase tracking-wider">
                 <Code size={16} className="text-textDim" />
                 Projects
+                {(currentResume.content?.projects?.length > 0) && (
+                  <span className="ml-1 px-1.5 py-0.5 bg-primary/20 text-primary text-[10px] font-bold rounded-full border border-primary/30">{currentResume.content.projects.length}</span>
+                )}
               </div>
               {activeAccordion === 'projects' ? <ChevronUp size={16} className="text-textDim" /> : <ChevronDown size={16} className="text-textDim" />}
             </div>
             <AnimatePresence>
               {activeAccordion === 'projects' && (
-                <motion.div initial="collapsed" animate="open" exit="collapsed" variants={accordionVariants} transition={{ duration: 0.2 }} className="px-4 pb-4 flex flex-col gap-6 overflow-hidden">
+                <motion.div initial="collapsed" animate="open" exit="collapsed" variants={accordionVariants} transition={{ duration: 0.2 }} className="px-4 pb-4 flex flex-col gap-6">
                   {(currentResume.content?.projects || []).map((proj, idx) => (
                     <div key={idx} className="relative bg-slate-900/50 border border-borderDark rounded p-4 flex flex-col gap-4 group">
                       <button className="absolute top-3 right-3 text-textDim hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => removeListField('projects', idx)}>

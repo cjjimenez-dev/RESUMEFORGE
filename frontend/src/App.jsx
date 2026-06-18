@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Auth } from './components/Auth';
 import { Header } from './components/Header';
 import { Dashboard } from './components/Dashboard';
 import { Editor } from './components/Editor';
+import { ConfirmModal } from './components/ConfirmModal';
 
 const API_BASE_URL = 'http://localhost:8000/api';
 
@@ -136,6 +137,25 @@ export default function App() {
   const fileInputRef = useRef(null);
   const [importing, setImporting] = useState(false);
   const [importError, setImportError] = useState('');
+
+  // Custom confirm modal state
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    confirmText: 'Confirm',
+    cancelText: 'Cancel',
+    variant: 'danger',
+    onConfirm: null,
+  });
+
+  const showConfirm = useCallback(({ title, message, confirmText = 'Confirm', cancelText = 'Cancel', variant = 'danger', onConfirm }) => {
+    setConfirmModal({ isOpen: true, title, message, confirmText, cancelText, variant, onConfirm });
+  }, []);
+
+  const closeConfirm = useCallback(() => {
+    setConfirmModal(prev => ({ ...prev, isOpen: false, onConfirm: null }));
+  }, []);
   const [isDragging, setIsDragging] = useState(false);
 
   // Load on boot
@@ -325,42 +345,59 @@ export default function App() {
     }
   };
 
-  const handleDeleteResume = async (id, e) => {
+  const handleDeleteResume = (id, e) => {
     e.stopPropagation();
-    if (!confirm("Are you sure you want to delete this resume?")) return;
-    if (isGuest) {
-      const saved = JSON.parse(localStorage.getItem('rf_guest') || '[]');
-      const newList = saved.filter(r => r.id !== id);
-      localStorage.setItem('rf_guest', JSON.stringify(newList));
-      setResumes(newList);
-      if (currentResume?.id === id) { setCurrentResume(null); setScreen('dashboard'); }
-      return;
-    }
-    try {
-      const res = await fetch(`${API_BASE_URL}/resumes/${id}`, {
-        method: 'DELETE',
-        headers: getHeaders()
-      });
-      if (res.ok) {
-        if (currentResume && currentResume.id === id) {
-          setCurrentResume(null);
-          setScreen('dashboard');
+    showConfirm({
+      title: 'Delete Resume',
+      message: 'This action is permanent and cannot be undone. Are you sure you want to delete this resume?',
+      confirmText: 'Yes, Delete',
+      cancelText: 'Keep It',
+      variant: 'danger',
+      onConfirm: async () => {
+        closeConfirm();
+        if (isGuest) {
+          const saved = JSON.parse(localStorage.getItem('rf_guest') || '[]');
+          const newList = saved.filter(r => r.id !== id);
+          localStorage.setItem('rf_guest', JSON.stringify(newList));
+          setResumes(newList);
+          if (currentResume?.id === id) { setCurrentResume(null); setScreen('dashboard'); }
+          return;
         }
-        fetchResumes();
-      }
-    } catch (err) {
-      console.error(err);
-    }
+        try {
+          const res = await fetch(`${API_BASE_URL}/resumes/${id}`, {
+            method: 'DELETE',
+            headers: getHeaders()
+          });
+          if (res.ok) {
+            if (currentResume && currentResume.id === id) {
+              setCurrentResume(null);
+              setScreen('dashboard');
+            }
+            fetchResumes();
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      },
+    });
   };
 
   const handleExportDocx = (id) => {
     if (isGuest) {
-      if (confirm('Word export requires a free account. Sign up now?')) {
-        localStorage.removeItem('guestMode');
-        setIsGuest(false);
-        setScreen('auth');
-        setResumes([]);
-      }
+      showConfirm({
+        title: 'Free Account Required',
+        message: 'Word export requires a free account. Sign up now to unlock this feature!',
+        confirmText: 'Sign Up Free',
+        cancelText: 'Maybe Later',
+        variant: 'info',
+        onConfirm: () => {
+          closeConfirm();
+          localStorage.removeItem('guestMode');
+          setIsGuest(false);
+          setScreen('auth');
+          setResumes([]);
+        },
+      });
       return;
     }
     window.open(`${API_BASE_URL}/resumes/${id}/export/docx?token=${token}`, '_blank');
@@ -372,12 +409,20 @@ export default function App() {
 
   const handleImportFile = async (file) => {
     if (isGuest) {
-      if (confirm('File import requires a free account to process. Sign up now?')) {
-        localStorage.removeItem('guestMode');
-        setIsGuest(false);
-        setScreen('auth');
-        setResumes([]);
-      }
+      showConfirm({
+        title: 'Free Account Required',
+        message: 'File import requires a free account to process. Sign up now — it\'s completely free!',
+        confirmText: 'Sign Up Free',
+        cancelText: 'Maybe Later',
+        variant: 'info',
+        onConfirm: () => {
+          closeConfirm();
+          localStorage.removeItem('guestMode');
+          setIsGuest(false);
+          setScreen('auth');
+          setResumes([]);
+        },
+      });
       return;
     }
     if (!file) return;
@@ -507,6 +552,18 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-bgStart text-textMain font-sans flex flex-col">
+      {/* Custom Confirm Modal — replaces all native browser confirm() dialogs */}
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        confirmText={confirmModal.confirmText}
+        cancelText={confirmModal.cancelText}
+        variant={confirmModal.variant}
+        onConfirm={confirmModal.onConfirm}
+        onCancel={closeConfirm}
+      />
+
       <Header 
         token={token} 
         isGuest={isGuest} 
