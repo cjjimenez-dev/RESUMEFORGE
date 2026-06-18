@@ -1,10 +1,15 @@
 {
-  "experimentalServices": {
-    "frontend": {
-      "root": "frontend"
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/dist",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
     },
-    "backend": {
-      "root": "backend"
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
-  }
+  ]
 }
